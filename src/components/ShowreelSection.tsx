@@ -64,16 +64,26 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
   const eyeRightRef = useRef<THREE.Mesh>(null);
   const [isBlinking, setIsBlinking] = useState(false);
 
-    useFrame((state) => {
+      useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.6;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.3;
+      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.2;
     }
 
-    if (reelRef.current) {
-      reelRef.current.rotation.z = state.clock.elapsedTime * 0.8;
+    if (headRef.current) {
+      headRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.1;
     }
   });
+
+  // Blinking animation
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setIsBlinking(true);
+      setTimeout(() => setIsBlinking(false), 150);
+    }, 3000);
+
+    return () => clearInterval(blinkInterval);
+  }, []);
 
   const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
     const reelColor = currentCategory?.color || '#D4AF37';
