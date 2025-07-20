@@ -7,29 +7,84 @@ import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VideoLoop = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+// 3D Portrait Mesh Component
+const PortraitMesh = ({ morphProgress }: { morphProgress: number }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play();
+    if (meshRef.current) {
+      const geometry = meshRef.current.geometry as THREE.SphereGeometry;
+      const vertices = geometry.attributes.position.array;
+
+      // Apply wireframe morphing effect
+      for (let i = 0; i < vertices.length; i += 3) {
+        const x = vertices[i];
+        const y = vertices[i + 1];
+        const z = vertices[i + 2];
+
+        // Morphing calculation based on progress
+        const noise = Math.sin(x * 2 + y * 2 + Date.now() * 0.001) * morphProgress * 0.1;
+        vertices[i + 2] = z + noise;
+      }
+
+      geometry.attributes.position.needsUpdate = true;
     }
-  }, []);
+  }, [morphProgress]);
 
   return (
-    <video
-      ref={videoRef}
-      className="w-full h-full object-cover rounded-lg opacity-80"
-      loop
-      muted
-      playsInline
-      autoPlay
-    >
-      {/* Placeholder for video - would be actual editing footage */}
-      <source src="/editing-workspace.mp4" type="video/mp4" />
-      {/* Fallback gradient for demo */}
-      <div className="w-full h-full bg-gradient-lens opacity-50" />
-    </video>
+    <mesh ref={meshRef} rotation={[0, 0, 0]}>
+      <sphereGeometry args={[2, 32, 32]} />
+      <meshBasicMaterial
+        color="#D4AF37"
+        wireframe={morphProgress > 0.3}
+        transparent
+        opacity={0.8}
+      />
+    </mesh>
+  );
+};
+
+const VideoSnippet = ({ src, delay = 0 }: { src: string; delay?: number }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Stagger animation for video snippets
+    gsap.fromTo(container,
+      { opacity: 0, scale: 0.8, y: 30 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.8,
+        delay,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: container,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+  }, [delay]);
+
+  return (
+    <div ref={containerRef} className="relative h-32 rounded-lg overflow-hidden shadow-film bg-cinema-black/20">
+      {/* Simulated video content with gradient */}
+      <div className="w-full h-full bg-gradient-to-br from-cinema-gold/30 to-cinema-orange/20 flex items-center justify-center">
+        <div className="text-cinema-white/60 text-xs text-center px-2">
+          {src === 'timeline' && '🎬 Timeline Editing'}
+          {src === 'color' && '🎨 Color Grading'}
+          {src === 'effects' && '✨ Visual Effects'}
+          {src === 'audio' && '🎵 Audio Mixing'}
+        </div>
+      </div>
+
+      {/* Play indicator */}
+      <div className="absolute top-2 right-2 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+    </div>
   );
 };
 
