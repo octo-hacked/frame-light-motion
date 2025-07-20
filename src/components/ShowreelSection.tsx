@@ -101,6 +101,60 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
   );
 };
 
+// Speech Bubble Component
+const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
+  const [currentMessage, setCurrentMessage] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const messages = [
+    "🎬 Welcome to my showreel!",
+    "✨ I help edit amazing videos",
+    "🎨 Each category shows different styles",
+    "🚀 Let's create something epic together!",
+    "💡 Hover over videos for previews",
+    "🎯 Click to watch full projects"
+  ];
+
+  const categoryMessages = {
+    commercials: "💼 Corporate work is my specialty! Professional and polished.",
+    youtube: "📺 YouTube content that truly engages! Fun and dynamic editing.",
+    music: "🎵 Music videos with rhythm and soul! Perfectly synced visuals.",
+    films: "🎭 Cinematic storytelling at its finest! Epic narratives unfold."
+  };
+
+  useEffect(() => {
+    setCurrentMessage(0);
+    setIsVisible(true);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    const messageInterval = setInterval(() => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentMessage(prev => (prev + 1) % messages.length);
+        setIsVisible(true);
+      }, 300);
+    }, 4000);
+
+    return () => clearInterval(messageInterval);
+  }, [messages.length]);
+
+  const currentCategoryMessage = categoryMessages[activeCategory as keyof typeof categoryMessages];
+  const displayMessage = currentCategoryMessage || messages[currentMessage];
+
+  return (
+    <div className={`absolute -top-20 left-1/2 transform -translate-x-1/2 transition-all duration-300 z-50 ${
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+    }`}>
+      <div className="bg-cinema-white/95 text-cinema-black px-6 py-3 rounded-2xl rounded-bl-sm shadow-lg max-w-xs text-center relative">
+        <p className="text-sm font-medium leading-relaxed">{displayMessage}</p>
+        {/* Speech bubble tail */}
+        <div className="absolute bottom-0 left-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-cinema-white/95 transform translate-y-full"></div>
+      </div>
+    </div>
+  );
+};
+
 // Simplified Film Strip component
 const FilmStrip = ({ videos, activeVideo }: { 
   videos: any[]; 
