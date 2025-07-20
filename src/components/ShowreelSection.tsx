@@ -74,7 +74,7 @@ const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
   });
 
   const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
-  const cubeColor = currentCategory?.color || '#D4AF37';
+    const reelColor = currentCategory?.color || '#D4AF37';
 
   return (
     <mesh ref={cubeRef}>
