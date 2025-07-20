@@ -56,8 +56,8 @@ const videoCategories = [
   }
 ];
 
-// EditorBot Robot Component
-const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
+// 2D Animated Film Camera Component
+const VintageCamera = ({ activeCategory }: { activeCategory: string }) => {
   const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Mesh>(null);
   const [isBlinking, setIsBlinking] = useState(false);
