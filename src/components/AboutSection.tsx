@@ -321,7 +321,7 @@ export const AboutSection = () => {
           </div>
 
           {/* Video Loop Section */}
-          <div className="h-1/2 p-6 bg-cinema-black/50">
+                    <div className="h-2/5 p-6 bg-cinema-black/80">
             <div className="h-full rounded-lg overflow-hidden shadow-film">
               <VideoLoop />
             </div>
