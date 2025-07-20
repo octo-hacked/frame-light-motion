@@ -401,7 +401,7 @@ export const ShowreelSection = () => {
             <ambientLight intensity={0.4} />
             <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
             <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-            <CategoryCube activeCategory={activeCategory} />
+                        <FilmReel activeCategory={activeCategory} />
             <FilmStrip videos={currentVideos} activeVideo={activeVideo} />
             <OrbitControls 
               enableZoom={false} 
