@@ -56,20 +56,18 @@ const videoCategories = [
   }
 ];
 
-// Simplified 3D Cube component 
+// EditorBot Robot Component
 const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
-      const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Mesh>(null);
-  const eyeLeftRef = useRef<THREE.Mesh>(null);
-  const eyeRightRef = useRef<THREE.Mesh>(null);
   const [isBlinking, setIsBlinking] = useState(false);
 
-      useFrame((state) => {
+  useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.2;
     }
-
+    
     if (headRef.current) {
       headRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.1;
     }
@@ -86,28 +84,106 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
   }, []);
 
   const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
-      const robotColor = currentCategory?.color || '#D4AF37';
+  const robotColor = currentCategory?.color || '#D4AF37';
 
   return (
-        <group ref={groupRef}>
-            {/* Robot Body */}
+    <group ref={groupRef} scale={[0.8, 0.8, 0.8]}>
+      {/* Robot Body */}
       <mesh position={[0, -1, 0]}>
-        <boxGeometry args={[1.8, 2.5, 1.2]} />
-        <meshPhongMaterial
-          color="#333"
+        <boxGeometry args={[2.0, 3.0, 1.5]} />
+        <meshPhongMaterial 
+          color="#333" 
           shininess={100}
         />
       </mesh>
-
+      
       {/* Robot Head */}
-      <mesh ref={headRef} position={[0, 1.5, 0]}>
-        <boxGeometry args={[1.4, 1.4, 1.4]} />
-      <meshPhongMaterial 
-                          color={robotColor} 
-        transparent 
-        opacity={0.8}
-        shininess={100}
-            />
+      <mesh ref={headRef} position={[0, 1.8, 0]}>
+        <boxGeometry args={[1.6, 1.6, 1.6]} />
+        <meshPhongMaterial 
+          color={robotColor} 
+          shininess={100}
+        />
+      </mesh>
+      
+      {/* Eyes */}
+      <mesh 
+        position={[-0.4, 2.0, 0.8]}
+        scale={isBlinking ? [1, 0.1, 1] : [1, 1, 1]}
+      >
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshPhongMaterial color="#00ffff" emissive="#004444" />
+      </mesh>
+      
+      <mesh 
+        position={[0.4, 2.0, 0.8]}
+        scale={isBlinking ? [1, 0.1, 1] : [1, 1, 1]}
+      >
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshPhongMaterial color="#00ffff" emissive="#004444" />
+      </mesh>
+      
+      {/* Antenna */}
+      <mesh position={[0, 3.0, 0]}>
+        <cylinderGeometry args={[0.08, 0.08, 1.0, 8]} />
+        <meshPhongMaterial color={robotColor} />
+      </mesh>
+      
+      {/* Antenna tip */}
+      <mesh position={[0, 3.5, 0]}>
+        <sphereGeometry args={[0.15, 8, 8]} />
+        <meshPhongMaterial color="#ff0000" emissive="#330000" />
+      </mesh>
+      
+      {/* Arms */}
+      <mesh position={[-1.5, 0.8, 0]} rotation={[0, 0, Math.PI / 6]}>
+        <cylinderGeometry args={[0.25, 0.25, 2.0, 8]} />
+        <meshPhongMaterial color="#555" />
+      </mesh>
+      
+      <mesh position={[1.5, 0.8, 0]} rotation={[0, 0, -Math.PI / 6]}>
+        <cylinderGeometry args={[0.25, 0.25, 2.0, 8]} />
+        <meshPhongMaterial color="#555" />
+      </mesh>
+      
+      {/* Hands */}
+      <mesh position={[-2.2, -0.3, 0]}>
+        <sphereGeometry args={[0.4, 8, 8]} />
+        <meshPhongMaterial color={robotColor} />
+      </mesh>
+      
+      <mesh position={[2.2, -0.3, 0]}>
+        <sphereGeometry args={[0.4, 8, 8]} />
+        <meshPhongMaterial color={robotColor} />
+      </mesh>
+      
+      {/* Chest panel */}
+      <mesh position={[0, 0.2, 0.76]}>
+        <boxGeometry args={[1.2, 1.2, 0.1]} />
+        <meshPhongMaterial color={robotColor} shininess={150} />
+      </mesh>
+      
+      {/* Legs */}
+      <mesh position={[-0.5, -3.5, 0]}>
+        <cylinderGeometry args={[0.3, 0.3, 2.0, 8]} />
+        <meshPhongMaterial color="#555" />
+      </mesh>
+      
+      <mesh position={[0.5, -3.5, 0]}>
+        <cylinderGeometry args={[0.3, 0.3, 2.0, 8]} />
+        <meshPhongMaterial color="#555" />
+      </mesh>
+      
+      {/* Feet */}
+      <mesh position={[-0.5, -4.8, 0.4]}>
+        <boxGeometry args={[0.8, 0.4, 1.0]} />
+        <meshPhongMaterial color={robotColor} />
+      </mesh>
+      
+      <mesh position={[0.5, -4.8, 0.4]}>
+        <boxGeometry args={[0.8, 0.4, 1.0]} />
+        <meshPhongMaterial color={robotColor} />
+      </mesh>
     </group>
   );
 };
@@ -154,19 +230,18 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
   const displayMessage = currentCategoryMessage || messages[currentMessage];
 
   return (
-    <div className={`absolute -top-20 left-1/2 transform -translate-x-1/2 transition-all duration-300 z-50 ${
+    <div className={`absolute -top-16 left-1/2 transform -translate-x-1/2 transition-all duration-300 z-50 ${
       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
     }`}>
       <div className="bg-cinema-white/95 text-cinema-black px-6 py-3 rounded-2xl rounded-bl-sm shadow-lg max-w-xs text-center relative">
         <p className="text-sm font-medium leading-relaxed">{displayMessage}</p>
-        {/* Speech bubble tail */}
         <div className="absolute bottom-0 left-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-cinema-white/95 transform translate-y-full"></div>
       </div>
     </div>
   );
 };
 
-// Simplified Film Strip component
+// Film Strip component
 const FilmStrip = ({ videos, activeVideo }: { 
   videos: any[]; 
   activeVideo: number;
@@ -184,7 +259,7 @@ const FilmStrip = ({ videos, activeVideo }: {
     <group ref={groupRef}>
       {videos.slice(0, 4).map((video, index) => {
         const angle = (index / 4) * Math.PI * 2;
-        const radius = 2.5;
+        const radius = 4;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         const isActive = index === activeVideo;
@@ -197,7 +272,7 @@ const FilmStrip = ({ videos, activeVideo }: {
             scale={[scale, scale, scale]}
             rotation={[0, -angle + Math.PI/2, 0]}
           >
-            <boxGeometry args={[0.8, 0.5, 0.1]} />
+            <boxGeometry args={[1.0, 0.6, 0.1]} />
             <meshPhongMaterial 
               color={isActive ? '#D4AF37' : '#444'} 
               transparent 
@@ -222,11 +297,8 @@ const VideoThumbnail = ({
   onClick: () => void;
   onHover: (hover: boolean) => void;
 }) => {
-  const thumbnailRef = useRef<HTMLDivElement>(null);
-
   return (
     <div
-      ref={thumbnailRef}
       className={`relative cursor-pointer transition-all duration-500 transform ${
         isActive ? 'scale-110 z-10' : 'scale-100 hover:scale-105'
       }`}
@@ -234,32 +306,27 @@ const VideoThumbnail = ({
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
     >
-      {/* Video Thumbnail */}
       <div className="relative overflow-hidden rounded-lg shadow-film">
         <div className="aspect-video bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center">
           <div className="text-center text-cinema-white">
-            <div className="text-4xl mb-2">�����</div>
+            <div className="text-4xl mb-2">🎬</div>
             <div className="text-sm font-light">{video.title}</div>
           </div>
         </div>
         
-        {/* Play overlay */}
         <div className="absolute inset-0 bg-cinema-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <Play className="w-12 h-12 text-cinema-white" />
         </div>
         
-        {/* Duration badge */}
         <div className="absolute bottom-2 right-2 bg-cinema-black/80 text-cinema-white text-xs px-2 py-1 rounded">
           {video.duration}
         </div>
         
-        {/* Active indicator */}
         {isActive && (
           <div className="absolute top-2 left-2 w-3 h-3 bg-cinema-gold rounded-full animate-pulse" />
         )}
       </div>
       
-      {/* Video title */}
       <div className="mt-2 text-center">
         <h4 className="text-cinema-white text-sm font-medium truncate">{video.title}</h4>
       </div>
@@ -321,13 +388,11 @@ const ProgressBar = ({
         }}
         onClick={handleClick}
       >
-        {/* Progress */}
         <div 
           className="h-full bg-cinema-gold rounded-full transition-all duration-150"
           style={{ width: `${Math.min(100, (progress / duration) * 100)}%` }}
         />
         
-        {/* Hover indicator */}
         {hoveredTime !== null && (
           <>
             <div 
@@ -344,7 +409,6 @@ const ProgressBar = ({
         )}
       </div>
       
-      {/* Time display */}
       <div className="flex justify-between text-cinema-white/60 text-xs mt-1">
         <span>{formatTime(progress)}</span>
         <span>{formatTime(duration)}</span>
@@ -364,16 +428,14 @@ export const ShowreelSection = () => {
 
   const currentVideos = videoCategories.find(cat => cat.id === activeCategory)?.videos || [];
   const currentVideo = currentVideos[activeVideo];
-  const duration = 120; // Mock duration in seconds
+  const duration = 120;
 
-  // Auto-play progress simulation
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isPlaying) {
       interval = setInterval(() => {
         setProgress(prev => {
           if (prev >= duration) {
-            // Auto-advance to next video
             setActiveVideo(current => (current + 1) % currentVideos.length);
             return 0;
           }
@@ -384,7 +446,6 @@ export const ShowreelSection = () => {
     return () => clearInterval(interval);
   }, [isPlaying, duration, currentVideos.length]);
 
-  // Section animations
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -441,7 +502,7 @@ export const ShowreelSection = () => {
           Featured <span className="bg-gradient-cinematic bg-clip-text text-transparent">Showreel</span>
         </h2>
         <p className="text-xl text-cinema-white/70 max-w-2xl mx-auto">
-          Explore my portfolio across different categories of video content
+          Meet my AI assistant! It will guide you through my portfolio
         </p>
       </div>
 
@@ -472,14 +533,14 @@ export const ShowreelSection = () => {
           </div>
         </div>
 
-                {/* 3D Visualization */}
-        <div className="h-64 mb-12 rounded-lg overflow-hidden relative">
+        {/* 3D Visualization with Robot */}
+        <div className="h-80 mb-12 rounded-lg overflow-hidden relative">
           <SpeechBubble activeCategory={activeCategory} />
-          <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
+          <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
             <ambientLight intensity={0.4} />
             <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
             <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-                                    <EditorBot activeCategory={activeCategory} />
+            <EditorBot activeCategory={activeCategory} />
             <FilmStrip videos={currentVideos} activeVideo={activeVideo} />
             <OrbitControls 
               enableZoom={false} 
@@ -495,10 +556,8 @@ export const ShowreelSection = () => {
         {/* Main Video Player */}
         <div className="max-w-4xl mx-auto mb-12">
           <div className="relative">
-            {/* Video Container */}
             <div className="aspect-video bg-gradient-to-br from-cinema-black to-cinema-gold/10 rounded-lg overflow-hidden shadow-film relative">
               
-              {/* Mock Video Content */}
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20">
                 <div className="text-center text-cinema-white">
                   <div className="text-6xl mb-4">🎬</div>
@@ -509,7 +568,6 @@ export const ShowreelSection = () => {
                 </div>
               </div>
 
-              {/* Play/Pause Overlay */}
               <div className="absolute inset-0 flex items-center justify-center bg-cinema-black/30 opacity-0 hover:opacity-100 transition-opacity duration-300">
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
@@ -524,9 +582,7 @@ export const ShowreelSection = () => {
               </div>
             </div>
 
-            {/* Video Controls */}
             <div className="mt-6 space-y-4">
-              {/* Progress Bar */}
               <ProgressBar
                 progress={progress}
                 duration={duration}
@@ -534,7 +590,6 @@ export const ShowreelSection = () => {
                 onHover={setHoveredTime}
               />
 
-              {/* Control Buttons */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button 
@@ -575,7 +630,7 @@ export const ShowreelSection = () => {
                 </div>
 
                 <div className="text-cinema-white/60 text-sm">
-                  {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Hover timeline for preview'}
+                  {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Robot guide active'}
                 </div>
               </div>
             </div>
@@ -590,9 +645,7 @@ export const ShowreelSection = () => {
               video={video}
               isActive={index === activeVideo}
               onClick={() => handleVideoSelect(index)}
-              onHover={(hover) => {
-                // Add hover preview logic here if needed
-              }}
+              onHover={(hover) => {}}
             />
           ))}
         </div>
