@@ -11,12 +11,9 @@ const Portrait3D = ({ isHovered }: { isHovered: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useEffect(() => {
-    if (meshRef.current) {
-      gsap.to(meshRef.current.material, {
-        wireframe: isHovered,
-        duration: 0.8,
-        ease: "power2.out"
-      });
+    if (meshRef.current && meshRef.current.material) {
+      // Cast to MeshBasicMaterial which has wireframe property
+      (meshRef.current.material as THREE.MeshBasicMaterial).wireframe = isHovered;
     }
   }, [isHovered]);
 
