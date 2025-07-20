@@ -86,7 +86,7 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
   }, []);
 
   const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
-    const reelColor = currentCategory?.color || '#D4AF37';
+      const robotColor = currentCategory?.color || '#D4AF37';
 
   return (
         <group ref={groupRef}>
