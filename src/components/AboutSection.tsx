@@ -287,8 +287,14 @@ export const AboutSection = () => {
             onMouseEnter={() => setIsPortraitHovered(true)}
             onMouseLeave={() => setIsPortraitHovered(false)}
           >
-            <div className="w-32 h-32 rounded-full bg-cinema-gold/30 flex items-center justify-center">
-              <div className="text-cinema-gold text-4xl">👤</div>
+                        {/* 3D Canvas */}
+            <div className="absolute inset-0">
+              <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
+                <PortraitMesh morphProgress={isPortraitHovered ? 1 : 0} />
+                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+              </Canvas>
             </div>
             
             {/* Overlay Info */}
