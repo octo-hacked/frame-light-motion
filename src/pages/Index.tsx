@@ -10,7 +10,8 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       
-            <ShowreelSection />
+                  <ShowreelSection />
+      <ProjectsSection />
     </ScrollContainer>
   );
 };
