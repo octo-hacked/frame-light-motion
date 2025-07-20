@@ -550,8 +550,14 @@ export const ShowreelSection = () => {
               autoRotateSpeed={0.5}
               maxPolarAngle={Math.PI / 1.5}
               minPolarAngle={Math.PI / 3}
-            />
+                        />
           </Canvas>
+          </div>
+
+          {/* Speech Bubble - right side panel */}
+          <div className="w-80 flex items-center justify-start pl-6 h-full">
+            <SpeechBubble activeCategory={activeCategory} />
+          </div>
         </div>
 
         {/* Main Video Player */}
