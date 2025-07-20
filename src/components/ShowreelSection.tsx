@@ -80,7 +80,7 @@ const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
         <group ref={groupRef}>
       <boxGeometry args={[1.5, 1.5, 1.5]} />
       <meshPhongMaterial 
-        color={cubeColor} 
+                color={reelColor} 
         transparent 
         opacity={0.8}
         shininess={100}
