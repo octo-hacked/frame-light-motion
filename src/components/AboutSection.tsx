@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -10,20 +10,11 @@ gsap.registerPlugin(ScrollTrigger);
 const Portrait3D = ({ isHovered }: { isHovered: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
 
-  useEffect(() => {
-    if (meshRef.current && meshRef.current.material) {
-      // Cast to MeshBasicMaterial which has wireframe property
-      (meshRef.current.material as THREE.MeshBasicMaterial).wireframe = isHovered;
-    }
-  }, [isHovered]);
-
   return (
     <Sphere ref={meshRef} args={[1, 32, 32]} scale={2}>
-      <MeshDistortMaterial
+      <meshStandardMaterial
         color="#D4AF37"
-        attach="material"
-        distort={0.3}
-        speed={2}
+        wireframe={isHovered}
         roughness={0.4}
         metalness={0.8}
       />
