@@ -84,8 +84,8 @@ const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
         transparent 
         opacity={0.8}
         shininess={100}
-      />
-    </mesh>
+            />
+    </group>
   );
 };
 
@@ -161,7 +161,7 @@ const VideoThumbnail = ({
       <div className="relative overflow-hidden rounded-lg shadow-film">
         <div className="aspect-video bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center">
           <div className="text-center text-cinema-white">
-            <div className="text-4xl mb-2">🎬</div>
+            <div className="text-4xl mb-2">����</div>
             <div className="text-sm font-light">{video.title}</div>
           </div>
         </div>
