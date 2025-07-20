@@ -229,13 +229,14 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
   const currentCategoryMessage = categoryMessages[activeCategory as keyof typeof categoryMessages];
   const displayMessage = currentCategoryMessage || messages[currentMessage];
 
-  return (
-    <div className={`absolute -top-16 left-1/2 transform -translate-x-1/2 transition-all duration-300 z-50 ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+    return (
+    <div className={`absolute top-1/2 right-4 transform -translate-y-1/2 transition-all duration-300 z-50 ${
+      isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
     }`}>
-      <div className="bg-cinema-white/95 text-cinema-black px-6 py-3 rounded-2xl rounded-bl-sm shadow-lg max-w-xs text-center relative">
+      <div className="bg-cinema-white/95 text-cinema-black px-6 py-4 rounded-2xl rounded-tl-sm shadow-lg max-w-sm text-left relative">
         <p className="text-sm font-medium leading-relaxed">{displayMessage}</p>
-        <div className="absolute bottom-0 left-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-cinema-white/95 transform translate-y-full"></div>
+        {/* Speech bubble tail pointing left */}
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-cinema-white/95"></div>
       </div>
     </div>
   );
