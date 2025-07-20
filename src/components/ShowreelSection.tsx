@@ -180,7 +180,7 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const messages = [
-    "�� Welcome to my showreel!",
+    "🎬 Welcome to my showreel!",
     "✨ Check out my editing work",
     "🎨 Each category shows different styles",
     "🚀 Professional video editing services",
@@ -478,7 +478,7 @@ export const ShowreelSection = () => {
 
         {/* 2D Camera Visualization */}
         <div className="h-80 mb-12 rounded-lg overflow-hidden relative flex items-center bg-gradient-to-r from-cinema-black via-gray-900 to-cinema-black">
-          <div className="flex items-center h-full w-full">
+                    <div className="flex items-center h-full max-w-5xl mx-auto px-8 gap-6">
             {/* Camera section - takes most space */}
             <div className="flex-1 h-full flex items-center justify-center">
               <VintageCamera activeCategory={activeCategory} />
