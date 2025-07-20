@@ -35,16 +35,17 @@ export const HeroSection = () => {
       "-=1"
     );
 
-    // Scoped parallax background effect with proper bounds
+        // Scoped parallax background effect with proper bounds
     const scrollTrigger = createScrollTrigger({
       trigger: container,
       start: "top top",
       end: "bottom top",
-      scrub: 1,
+      scrub: 1.5,
       onUpdate: (self) => {
         const progress = self.progress;
         gsap.set(background, {
-          yPercent: -30 * progress, // Reduced from -50 to prevent overflow
+          yPercent: -50 * progress,
+          scale: 1 + 0.1 * progress,
           ease: "none"
         });
       }
