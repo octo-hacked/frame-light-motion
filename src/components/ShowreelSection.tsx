@@ -108,7 +108,7 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
 
   const messages = [
     "🎬 Welcome to my showreel!",
-    "�� I help edit amazing videos",
+    "✨ I help edit amazing videos",
     "🎨 Each category shows different styles",
     "🚀 Let's create something epic together!",
     "💡 Hover over videos for previews",
@@ -461,8 +461,9 @@ export const ShowreelSection = () => {
           </div>
         </div>
 
-        {/* 3D Visualization */}
-        <div className="h-64 mb-12 rounded-lg overflow-hidden">
+                {/* 3D Visualization */}
+        <div className="h-64 mb-12 rounded-lg overflow-hidden relative">
+          <SpeechBubble activeCategory={activeCategory} />
           <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
             <ambientLight intensity={0.4} />
             <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
