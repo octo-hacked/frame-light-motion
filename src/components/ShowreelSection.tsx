@@ -90,7 +90,18 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
 
   return (
         <group ref={groupRef}>
-      <boxGeometry args={[1.5, 1.5, 1.5]} />
+            {/* Robot Body */}
+      <mesh position={[0, -1, 0]}>
+        <boxGeometry args={[1.8, 2.5, 1.2]} />
+        <meshPhongMaterial
+          color="#333"
+          shininess={100}
+        />
+      </mesh>
+
+      {/* Robot Head */}
+      <mesh ref={headRef} position={[0, 1.5, 0]}>
+        <boxGeometry args={[1.4, 1.4, 1.4]} />
       <meshPhongMaterial 
                           color={robotColor} 
         transparent 
@@ -227,7 +238,7 @@ const VideoThumbnail = ({
       <div className="relative overflow-hidden rounded-lg shadow-film">
         <div className="aspect-video bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center">
           <div className="text-center text-cinema-white">
-            <div className="text-4xl mb-2">����</div>
+            <div className="text-4xl mb-2">�����</div>
             <div className="text-sm font-light">{video.title}</div>
           </div>
         </div>
