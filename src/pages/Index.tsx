@@ -1,9 +1,10 @@
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
+import { ScrollContainer } from "@/components/ScrollContainer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <ScrollContainer className="min-h-screen">
       <HeroSection />
       <AboutSection />
       
@@ -14,7 +15,7 @@ const Index = () => {
           <p className="text-xl text-cinema-white/70">This is where your portfolio content will expand</p>
         </div>
       </div>
-    </div>
+    </ScrollContainer>
   );
 };
 

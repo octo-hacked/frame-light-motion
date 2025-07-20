@@ -20,13 +20,15 @@ export const ParallaxText = ({
   delay = 0
 }: ParallaxTextProps) => {
   const textRef = useRef<HTMLDivElement>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
   useEffect(() => {
     const element = textRef.current;
     if (!element) return;
 
     // Initial reveal animation
-    gsap.fromTo(element,
+    const revealTl = gsap.timeline();
+    revealTl.fromTo(element,
       { 
         opacity: 0, 
         y: direction === 'up' ? 50 : -50,
@@ -42,24 +44,29 @@ export const ParallaxText = ({
       }
     );
 
-    // Parallax scroll effect
-    const parallaxTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: element,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
+    // Scoped parallax scroll effect with reduced movement
+    const moveDistance = direction === 'up' ? -50 * speed : 50 * speed; // Reduced from 100 to 50
+    
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: element,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        gsap.set(element, {
+          y: moveDistance * progress,
+          ease: "none"
+        });
       }
     });
 
-    const moveDistance = direction === 'up' ? -100 * speed : 100 * speed;
-    parallaxTl.to(element, {
-      y: moveDistance,
-      ease: "none"
-    });
-
     return () => {
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      revealTl.kill();
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+        scrollTriggerRef.current = null;
+      }
     };
   }, [speed, direction, delay]);
 

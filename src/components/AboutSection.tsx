@@ -131,6 +131,7 @@ export const AboutSection = () => {
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
   const [isPortraitHovered, setIsPortraitHovered] = useState(false);
+  const scrollTriggersRef = useRef<ScrollTrigger[]>([]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -140,27 +141,26 @@ export const AboutSection = () => {
 
     if (!section || !leftPanel || !rightPanel || !portrait) return;
 
-    // Pin the section for scroll-driven content
-    ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: "bottom bottom",
-      pin: true,
-      pinSpacing: false,
-      scrub: 1
-    });
+    // Clear any existing scroll triggers for this section
+    scrollTriggersRef.current.forEach(trigger => trigger.kill());
+    scrollTriggersRef.current = [];
 
-    // Parallax effect for left panel
-    gsap.to(leftPanel, {
-      yPercent: -50,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
+    // Gentle parallax effect for left panel - scoped to this section only
+    const leftPanelTrigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        gsap.set(leftPanel, {
+          yPercent: -20 * progress, // Reduced movement
+          ease: "none"
+        });
       }
     });
+    
+    scrollTriggersRef.current.push(leftPanelTrigger);
 
     // Depth of field effect setup
     const handleMouseMove = (e: MouseEvent) => {
@@ -192,7 +192,9 @@ export const AboutSection = () => {
     return () => {
       portrait.removeEventListener('mousemove', handleMouseMove);
       portrait.removeEventListener('mouseleave', handleMouseLeave);
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      // Clean up only this section's scroll triggers
+      scrollTriggersRef.current.forEach(trigger => trigger.kill());
+      scrollTriggersRef.current = [];
     };
   }, []);
 

@@ -1,14 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FloatingCamera } from './FloatingCamera';
 import { ParallaxText } from './ParallaxText';
 import { ScrollIndicator } from './ScrollIndicator';
 import { CinematicCursor } from './CinematicCursor';
+import { useScrollManager } from '@/hooks/useScrollManager';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const { createScrollTrigger } = useScrollManager();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -30,19 +35,26 @@ export const HeroSection = () => {
       "-=1"
     );
 
-    // Parallax background effect on scroll
-    gsap.to(background, {
-      yPercent: -50,
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
+    // Scoped parallax background effect with proper bounds
+    const scrollTrigger = createScrollTrigger({
+      trigger: container,
+      start: "top top",
+      end: "bottom top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        gsap.set(background, {
+          yPercent: -30 * progress, // Reduced from -50 to prevent overflow
+          ease: "none"
+        });
       }
     });
 
-  }, []);
+    return () => {
+      tl.kill();
+      scrollTrigger?.kill();
+    };
+  }, [createScrollTrigger]);
 
   return (
     <>
