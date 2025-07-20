@@ -56,43 +56,34 @@ const videoCategories = [
   }
 ];
 
-// 3D Cube component for category transitions
-const CategoryCube = ({ activeCategory, onCategoryChange }: { 
-  activeCategory: string; 
-  onCategoryChange: (category: string) => void;
-}) => {
+// Simplified 3D Cube component 
+const CategoryCube = ({ activeCategory }: { activeCategory: string }) => {
   const cubeRef = useRef<THREE.Mesh>(null);
-  const [rotation, setRotation] = useState(0);
 
   useFrame((state) => {
     if (cubeRef.current) {
-      cubeRef.current.rotation.y = rotation;
-      cubeRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      cubeRef.current.rotation.y = state.clock.elapsedTime * 0.5;
+      cubeRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
     }
   });
 
-  const handleCubeClick = () => {
-    const currentIndex = videoCategories.findIndex(cat => cat.id === activeCategory);
-    const nextIndex = (currentIndex + 1) % videoCategories.length;
-    const nextCategory = videoCategories[nextIndex];
-    
-    setRotation(prev => prev + Math.PI / 2);
-    onCategoryChange(nextCategory.id);
-  };
+  const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
+  const cubeColor = currentCategory?.color || '#D4AF37';
 
   return (
-    <mesh ref={cubeRef} onClick={handleCubeClick} position={[0, 0, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
+    <mesh ref={cubeRef}>
+      <boxGeometry args={[1.5, 1.5, 1.5]} />
       <meshPhongMaterial 
-        color={videoCategories.find(cat => cat.id === activeCategory)?.color || '#D4AF37'} 
+        color={cubeColor} 
         transparent 
         opacity={0.8}
+        shininess={100}
       />
     </mesh>
   );
 };
 
-// Floating Film Strip component
+// Simplified Film Strip component
 const FilmStrip = ({ videos, activeVideo }: { 
   videos: any[]; 
   activeVideo: number;
@@ -101,33 +92,35 @@ const FilmStrip = ({ videos, activeVideo }: {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
     }
   });
 
   return (
     <group ref={groupRef}>
-      {videos.map((video, index) => {
-        const angle = (index / videos.length) * Math.PI * 2;
-        const radius = 3;
+      {videos.slice(0, 4).map((video, index) => {
+        const angle = (index / 4) * Math.PI * 2;
+        const radius = 2.5;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
         const isActive = index === activeVideo;
+        const scale = isActive ? 1.0 : 0.7;
         
         return (
-          <Box
+          <mesh
             key={video.id}
             position={[x, 0, z]}
-            scale={isActive ? 1.2 : 0.8}
-            rotation={[0, -angle, 0]}
+            scale={[scale, scale, scale]}
+            rotation={[0, -angle + Math.PI/2, 0]}
           >
+            <boxGeometry args={[0.8, 0.5, 0.1]} />
             <meshPhongMaterial 
-              color={isActive ? '#D4AF37' : '#333'} 
+              color={isActive ? '#D4AF37' : '#444'} 
               transparent 
-              opacity={isActive ? 1 : 0.6}
+              opacity={isActive ? 1 : 0.7}
             />
-          </Box>
+          </mesh>
         );
       })}
     </group>
@@ -210,7 +203,7 @@ const ProgressBar = ({
     if (progressRef.current) {
       const rect = progressRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
-      const percentage = x / rect.width;
+      const percentage = Math.max(0, Math.min(1, x / rect.width));
       const time = percentage * duration;
       setHoveredTime(time);
       onHover(time);
@@ -221,7 +214,7 @@ const ProgressBar = ({
     if (progressRef.current) {
       const rect = progressRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
-      const percentage = x / rect.width;
+      const percentage = Math.max(0, Math.min(1, x / rect.width));
       const time = percentage * duration;
       onSeek(time);
     }
@@ -248,7 +241,7 @@ const ProgressBar = ({
         {/* Progress */}
         <div 
           className="h-full bg-cinema-gold rounded-full transition-all duration-150"
-          style={{ width: `${(progress / duration) * 100}%` }}
+          style={{ width: `${Math.min(100, (progress / duration) * 100)}%` }}
         />
         
         {/* Hover indicator */}
@@ -259,7 +252,7 @@ const ProgressBar = ({
               style={{ left: `${(hoveredTime / duration) * 100}%` }}
             />
             <div 
-              className="absolute -top-8 transform -translate-x-1/2 bg-cinema-black/90 text-cinema-white text-xs px-2 py-1 rounded"
+              className="absolute -top-8 transform -translate-x-1/2 bg-cinema-black/90 text-cinema-white text-xs px-2 py-1 rounded whitespace-nowrap"
               style={{ left: `${(hoveredTime / duration) * 100}%` }}
             >
               {formatTime(hoveredTime)}
@@ -372,9 +365,9 @@ export const ShowreelSection = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6">
         
-        {/* Category Selector with 3D Cube */}
+        {/* Category Selector */}
         <div className="flex justify-center mb-12">
-          <div className="flex items-center space-x-8">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             {videoCategories.map((category) => (
               <button
                 key={category.id}
@@ -397,20 +390,20 @@ export const ShowreelSection = () => {
         </div>
 
         {/* 3D Visualization */}
-        <div className="h-64 mb-12">
+        <div className="h-64 mb-12 rounded-lg overflow-hidden">
           <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
             <ambientLight intensity={0.4} />
-            <pointLight position={[10, 10, 10]} intensity={1} />
-            <CategoryCube 
-              activeCategory={activeCategory} 
-              onCategoryChange={handleCategoryChange}
-            />
+            <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
+            <directionalLight position={[-10, -10, -5]} intensity={0.5} />
+            <CategoryCube activeCategory={activeCategory} />
             <FilmStrip videos={currentVideos} activeVideo={activeVideo} />
             <OrbitControls 
               enableZoom={false} 
               enablePan={false} 
               autoRotate 
               autoRotateSpeed={0.5}
+              maxPolarAngle={Math.PI / 1.5}
+              minPolarAngle={Math.PI / 3}
             />
           </Canvas>
         </div>
@@ -514,7 +507,7 @@ export const ShowreelSection = () => {
               isActive={index === activeVideo}
               onClick={() => handleVideoSelect(index)}
               onHover={(hover) => {
-                // Add hover preview logic here
+                // Add hover preview logic here if needed
               }}
             />
           ))}
