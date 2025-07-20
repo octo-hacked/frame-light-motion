@@ -283,7 +283,7 @@ export const AboutSection = () => {
           {/* 3D Portrait Section - Temporarily simplified */}
           <div 
             ref={portraitRef}
-            className="h-1/2 relative cursor-pointer bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center"
+                        className="h-3/5 relative cursor-pointer bg-gradient-to-br from-cinema-black via-cinema-black/90 to-cinema-gold/10 flex items-center justify-center"
             onMouseEnter={() => setIsPortraitHovered(true)}
             onMouseLeave={() => setIsPortraitHovered(false)}
           >
