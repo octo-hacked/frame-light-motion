@@ -8,10 +8,11 @@ import {
   Layers, 
   Clock, 
   Star, 
-  CheckCircle,
+    CheckCircle,
   ArrowRight,
   Play,
-  Settings
+  Settings,
+  X
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
