@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import * as THREE from 'three';
 import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -58,131 +55,122 @@ const videoCategories = [
 
 // 2D Animated Film Camera Component
 const VintageCamera = ({ activeCategory }: { activeCategory: string }) => {
-    const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
+  const accentColor = currentCategory?.color || '#D4AF37';
 
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.2;
-    }
-    
-    if (headRef.current) {
-      headRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.1;
-    }
-  });
-
-  // Blinking animation
   useEffect(() => {
-    const blinkInterval = setInterval(() => {
-      setIsBlinking(true);
-      setTimeout(() => setIsBlinking(false), 150);
-    }, 3000);
+    const recordingInterval = setInterval(() => {
+      setIsRecording(prev => !prev);
+    }, 2000);
 
-    return () => clearInterval(blinkInterval);
+    return () => clearInterval(recordingInterval);
   }, []);
 
-  const currentCategory = videoCategories.find(cat => cat.id === activeCategory);
-  const robotColor = currentCategory?.color || '#D4AF37';
-
   return (
-    <group ref={groupRef} scale={[0.8, 0.8, 0.8]}>
-      {/* Robot Body */}
-      <mesh position={[0, -1, 0]}>
-        <boxGeometry args={[2.0, 3.0, 1.5]} />
-        <meshPhongMaterial 
-          color="#333" 
-          shininess={100}
-        />
-      </mesh>
+    <div className="relative flex items-center justify-center h-full">
+      {/* Film Camera Body */}
+      <div className="relative transform animate-float">
+        {/* Camera Base */}
+        <div className="w-40 h-28 bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg shadow-2xl relative border-2"
+             style={{ borderColor: accentColor }}>
+          {/* Camera Details */}
+          <div className="absolute top-3 left-3 w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+            <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
+          </div>
+          
+          {/* Lens */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border-4 flex items-center justify-center"
+               style={{ borderColor: accentColor }}>
+            <div className="w-16 h-16 bg-gradient-radial from-gray-900 via-gray-800 to-black rounded-full flex items-center justify-center shadow-inner">
+              <div className="w-10 h-10 bg-gradient-radial from-gray-800 to-gray-900 rounded-full relative overflow-hidden">
+                {/* Lens reflection */}
+                <div className="absolute top-1 left-1 w-3 h-3 bg-white opacity-40 rounded-full"></div>
+                <div className="absolute bottom-1 right-1 w-2 h-2 bg-white opacity-20 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Recording Light */}
+          <div className={`absolute top-2 right-3 w-4 h-4 rounded-full transition-all duration-300 ${
+            isRecording ? 'bg-red-500 animate-pulse shadow-lg shadow-red-500/50' : 'bg-red-800'
+          }`}></div>
+          
+          {/* Camera Brand */}
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-sm font-bold tracking-wider"
+               style={{ color: accentColor }}>
+            CINEMA
+          </div>
+          
+          {/* Control Dials */}
+          <div className="absolute top-2 right-12 w-3 h-3 rounded-full border-2 border-gray-600"></div>
+          <div className="absolute bottom-6 right-3 w-4 h-2 bg-gray-700 rounded"></div>
+        </div>
+        
+        {/* Film Strip */}
+        <div className="absolute -top-8 -right-10 w-24 h-6 bg-gray-800 rounded transform rotate-12 shadow-lg">
+          <div className="flex h-full">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="flex-1 border-l border-gray-600 first:border-l-0">
+                <div className="w-full h-3 bg-gradient-to-r from-gray-700 to-gray-600 mb-1"></div>
+                <div className="w-full h-1 bg-gray-700"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Floating Film Frames */}
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-10 h-8 bg-gray-800 border border-gray-600 rounded transform animate-float shadow-lg"
+            style={{
+              top: `${-15 + i * 10}px`,
+              left: `${-25 + i * 18}px`,
+              rotate: `${-20 + i * 12}deg`,
+              animationDelay: `${i * 0.7}s`,
+              animationDuration: '5s'
+            }}
+          >
+            <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded flex items-center justify-center">
+              <div className="text-sm" style={{ color: accentColor }}>
+                {i === 0 && '🎬'}
+                {i === 1 && '🎥'}
+                {i === 2 && '📽️'}
+                {i === 3 && '🎞️'}
+              </div>
+            </div>
+          </div>
+        ))}
+        
+        {/* Tripod legs */}
+        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="w-1 h-8 bg-gray-700 relative">
+            <div className="absolute bottom-0 -left-3 w-8 h-1 bg-gray-700 transform rotate-45 origin-right"></div>
+            <div className="absolute bottom-0 -right-3 w-8 h-1 bg-gray-700 transform -rotate-45 origin-left"></div>
+          </div>
+        </div>
+      </div>
       
-      {/* Robot Head */}
-      <mesh ref={headRef} position={[0, 1.8, 0]}>
-        <boxGeometry args={[1.6, 1.6, 1.6]} />
-        <meshPhongMaterial 
-          color={robotColor} 
-          shininess={100}
-        />
-      </mesh>
+      {/* Light Beam Effect */}
+      <div className="absolute left-full ml-6 w-40 h-2 bg-gradient-to-r from-yellow-400 to-transparent opacity-60 animate-pulse"
+           style={{ backgroundColor: accentColor, filter: 'blur(1px)' }}></div>
       
-      {/* Eyes */}
-      <mesh 
-        position={[-0.4, 2.0, 0.8]}
-        scale={isBlinking ? [1, 0.1, 1] : [1, 1, 1]}
-      >
-        <sphereGeometry args={[0.2, 16, 16]} />
-        <meshPhongMaterial color="#00ffff" emissive="#004444" />
-      </mesh>
-      
-      <mesh 
-        position={[0.4, 2.0, 0.8]}
-        scale={isBlinking ? [1, 0.1, 1] : [1, 1, 1]}
-      >
-        <sphereGeometry args={[0.2, 16, 16]} />
-        <meshPhongMaterial color="#00ffff" emissive="#004444" />
-      </mesh>
-      
-      {/* Antenna */}
-      <mesh position={[0, 3.0, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 1.0, 8]} />
-        <meshPhongMaterial color={robotColor} />
-      </mesh>
-      
-      {/* Antenna tip */}
-      <mesh position={[0, 3.5, 0]}>
-        <sphereGeometry args={[0.15, 8, 8]} />
-        <meshPhongMaterial color="#ff0000" emissive="#330000" />
-      </mesh>
-      
-      {/* Arms */}
-      <mesh position={[-1.5, 0.8, 0]} rotation={[0, 0, Math.PI / 6]}>
-        <cylinderGeometry args={[0.25, 0.25, 2.0, 8]} />
-        <meshPhongMaterial color="#555" />
-      </mesh>
-      
-      <mesh position={[1.5, 0.8, 0]} rotation={[0, 0, -Math.PI / 6]}>
-        <cylinderGeometry args={[0.25, 0.25, 2.0, 8]} />
-        <meshPhongMaterial color="#555" />
-      </mesh>
-      
-      {/* Hands */}
-      <mesh position={[-2.2, -0.3, 0]}>
-        <sphereGeometry args={[0.4, 8, 8]} />
-        <meshPhongMaterial color={robotColor} />
-      </mesh>
-      
-      <mesh position={[2.2, -0.3, 0]}>
-        <sphereGeometry args={[0.4, 8, 8]} />
-        <meshPhongMaterial color={robotColor} />
-      </mesh>
-      
-      {/* Chest panel */}
-      <mesh position={[0, 0.2, 0.76]}>
-        <boxGeometry args={[1.2, 1.2, 0.1]} />
-        <meshPhongMaterial color={robotColor} shininess={150} />
-      </mesh>
-      
-      {/* Legs */}
-      <mesh position={[-0.5, -3.5, 0]}>
-        <cylinderGeometry args={[0.3, 0.3, 2.0, 8]} />
-        <meshPhongMaterial color="#555" />
-      </mesh>
-      
-      <mesh position={[0.5, -3.5, 0]}>
-        <cylinderGeometry args={[0.3, 0.3, 2.0, 8]} />
-        <meshPhongMaterial color="#555" />
-      </mesh>
-      
-      {/* Feet */}
-      <mesh position={[-0.5, -4.8, 0.4]}>
-        <boxGeometry args={[0.8, 0.4, 1.0]} />
-        <meshPhongMaterial color={robotColor} />
-      </mesh>
-      
-      <mesh position={[0.5, -4.8, 0.4]}>
-        <boxGeometry args={[0.8, 0.4, 1.0]} />
-        <meshPhongMaterial color={robotColor} />
-      </mesh>
-    </group>
+      {/* Floating Particles */}
+      {[...Array(6)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute w-1 h-1 rounded-full animate-float opacity-70"
+          style={{
+            backgroundColor: accentColor,
+            top: `${20 + i * 15}%`,
+            right: `${10 + i * 8}%`,
+            animationDelay: `${i * 0.8}s`,
+            animationDuration: '6s'
+          }}
+        ></div>
+      ))}
+    </div>
   );
 };
 
@@ -193,18 +181,18 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
 
   const messages = [
     "🎬 Welcome to my showreel!",
-    "✨ I help edit amazing videos",
+    "✨ Check out my editing work",
     "🎨 Each category shows different styles",
-    "🚀 Let's create something epic together!",
+    "🚀 Professional video editing services",
     "💡 Hover over videos for previews",
     "🎯 Click to watch full projects"
   ];
 
   const categoryMessages = {
-    commercials: "💼 Corporate work is my specialty! Professional and polished.",
-    youtube: "📺 YouTube content that truly engages! Fun and dynamic editing.",
-    music: "🎵 Music videos with rhythm and soul! Perfectly synced visuals.",
-    films: "🎭 Cinematic storytelling at its finest! Epic narratives unfold."
+    commercials: "💼 Corporate work with professional polish and brand storytelling.",
+    youtube: "📺 YouTube content that engages viewers and builds communities.",
+    music: "🎵 Music videos with perfect rhythm sync and creative visuals.",
+    films: "🎭 Cinematic storytelling with Hollywood-level production value."
   };
 
   useEffect(() => {
@@ -227,7 +215,7 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
   const currentCategoryMessage = categoryMessages[activeCategory as keyof typeof categoryMessages];
   const displayMessage = currentCategoryMessage || messages[currentMessage];
 
-      return (
+  return (
     <div className={`transition-all duration-300 ${
       isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
     }`}>
@@ -237,50 +225,6 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
         <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-cinema-white/95"></div>
       </div>
     </div>
-  );
-};
-
-// Film Strip component
-const FilmStrip = ({ videos, activeVideo }: { 
-  videos: any[]; 
-  activeVideo: number;
-}) => {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {videos.slice(0, 4).map((video, index) => {
-        const angle = (index / 4) * Math.PI * 2;
-        const radius = 4;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const isActive = index === activeVideo;
-        const scale = isActive ? 1.0 : 0.7;
-        
-        return (
-          <mesh
-            key={video.id}
-            position={[x, 0, z]}
-            scale={[scale, scale, scale]}
-            rotation={[0, -angle + Math.PI/2, 0]}
-          >
-            <boxGeometry args={[1.0, 0.6, 0.1]} />
-            <meshPhongMaterial 
-              color={isActive ? '#D4AF37' : '#444'} 
-              transparent 
-              opacity={isActive ? 1 : 0.7}
-            />
-          </mesh>
-        );
-      })}
-    </group>
   );
 };
 
@@ -501,7 +445,7 @@ export const ShowreelSection = () => {
           Featured <span className="bg-gradient-cinematic bg-clip-text text-transparent">Showreel</span>
         </h2>
         <p className="text-xl text-cinema-white/70 max-w-2xl mx-auto">
-          Meet my AI assistant! It will guide you through my portfolio
+          Professional video editing with cinematic flair and creative storytelling
         </p>
       </div>
 
@@ -532,29 +476,18 @@ export const ShowreelSection = () => {
           </div>
         </div>
 
-        {/* 3D Visualization with Robot */}
-                <div className="h-80 mb-12 rounded-lg overflow-hidden relative flex items-center">
-                    <div className="flex-1 h-full">
-            <Canvas camera={{ position: [0, 1, 8], fov: 60 }}>
-            <ambientLight intensity={0.4} />
-            <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
-            <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-            <EditorBot activeCategory={activeCategory} />
-            <FilmStrip videos={currentVideos} activeVideo={activeVideo} />
-            <OrbitControls 
-              enableZoom={false} 
-              enablePan={false} 
-              autoRotate 
-              autoRotateSpeed={0.5}
-              maxPolarAngle={Math.PI / 1.5}
-              minPolarAngle={Math.PI / 3}
-                        />
-          </Canvas>
-          </div>
-
-          {/* Speech Bubble - right side panel */}
-          <div className="w-80 flex items-center justify-start pl-6 h-full">
-            <SpeechBubble activeCategory={activeCategory} />
+        {/* 2D Camera Visualization */}
+        <div className="h-80 mb-12 rounded-lg overflow-hidden relative flex items-center bg-gradient-to-r from-cinema-black via-gray-900 to-cinema-black">
+          <div className="flex items-center h-full w-full">
+            {/* Camera section - takes most space */}
+            <div className="flex-1 h-full flex items-center justify-center">
+              <VintageCamera activeCategory={activeCategory} />
+            </div>
+            
+            {/* Speech Bubble - right side panel */}
+            <div className="w-80 flex items-center justify-start pl-6 h-full">
+              <SpeechBubble activeCategory={activeCategory} />
+            </div>
           </div>
         </div>
 
@@ -635,7 +568,7 @@ export const ShowreelSection = () => {
                 </div>
 
                 <div className="text-cinema-white/60 text-sm">
-                  {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Robot guide active'}
+                  {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Professional editing showcase'}
                 </div>
               </div>
             </div>
