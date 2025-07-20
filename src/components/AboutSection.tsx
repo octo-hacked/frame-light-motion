@@ -307,10 +307,17 @@ export const AboutSection = () => {
               </h2>
             </div>
 
-            {/* Hover Instruction */}
+                        {/* Hover Instruction */}
             <div className="absolute bottom-6 right-6 text-cinema-white/60 text-sm">
-              Hover for effect
+              Hover to morph
             </div>
+
+            {/* Depth of field overlay */}
+            <div className="absolute inset-0 pointer-events-none transition-all duration-500"
+                 style={{
+                   backdropFilter: isPortraitHovered ? 'blur(2px)' : 'blur(0px)',
+                   background: isPortraitHovered ? 'radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.3) 70%)' : 'transparent'
+                 }} />
           </div>
 
           {/* Video Loop Section */}
