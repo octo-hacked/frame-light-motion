@@ -58,9 +58,7 @@ const videoCategories = [
 
 // 2D Animated Film Camera Component
 const VintageCamera = ({ activeCategory }: { activeCategory: string }) => {
-  const groupRef = useRef<THREE.Group>(null);
-  const headRef = useRef<THREE.Mesh>(null);
-  const [isBlinking, setIsBlinking] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
 
   useFrame((state) => {
     if (groupRef.current) {
