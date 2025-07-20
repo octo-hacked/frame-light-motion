@@ -229,8 +229,8 @@ const SpeechBubble = ({ activeCategory }: { activeCategory: string }) => {
   const currentCategoryMessage = categoryMessages[activeCategory as keyof typeof categoryMessages];
   const displayMessage = currentCategoryMessage || messages[currentMessage];
 
-    return (
-    <div className={`absolute top-1/2 right-4 transform -translate-y-1/2 transition-all duration-300 z-50 ${
+      return (
+    <div className={`transition-all duration-300 ${
       isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
     }`}>
       <div className="bg-cinema-white/95 text-cinema-black px-6 py-4 rounded-2xl rounded-tl-sm shadow-lg max-w-sm text-left relative">
