@@ -58,9 +58,11 @@ const videoCategories = [
 
 // Simplified 3D Cube component 
 const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
-    const groupRef = useRef<THREE.Group>(null);
-  const reelRef = useRef<THREE.Mesh>(null);
-  const coreRef = useRef<THREE.Mesh>(null);
+      const groupRef = useRef<THREE.Group>(null);
+  const headRef = useRef<THREE.Mesh>(null);
+  const eyeLeftRef = useRef<THREE.Mesh>(null);
+  const eyeRightRef = useRef<THREE.Mesh>(null);
+  const [isBlinking, setIsBlinking] = useState(false);
 
     useFrame((state) => {
     if (groupRef.current) {
