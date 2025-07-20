@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
 import { ShowreelSection } from "@/components/ShowreelSection";
@@ -7,16 +9,35 @@ import { ClientsTestimonialsSection } from "@/components/ClientsTestimonialsSect
 import { ScrollContainer } from "@/components/ScrollContainer";
 
 const Index = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Entrance animation after loading
+    gsap.fromTo(container, 
+      { opacity: 0 },
+      { 
+        opacity: 1, 
+        duration: 1.2, 
+        ease: "power2.out",
+        delay: 0.3
+      }
+    );
+  }, []);
+
   return (
-    <ScrollContainer className="min-h-screen">
-      <HeroSection />
-      <AboutSection />
-      
-                              <ShowreelSection />
-      <ProjectsSection />
-      <ServicesSection />
-      <ClientsTestimonialsSection />
-    </ScrollContainer>
+    <div ref={containerRef} className="opacity-0">
+      <ScrollContainer className="min-h-screen">
+        <HeroSection />
+        <AboutSection />
+        <ShowreelSection />
+        <ProjectsSection />
+        <ServicesSection />
+        <ClientsTestimonialsSection />
+      </ScrollContainer>
+    </div>
   );
 };
 
