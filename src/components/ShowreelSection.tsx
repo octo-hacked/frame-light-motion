@@ -57,7 +57,7 @@ const videoCategories = [
 ];
 
 // Simplified 3D Cube component 
-const CategoryCube = ({ activeCategory }: { activeCategory: string }) => {
+const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
   const cubeRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
