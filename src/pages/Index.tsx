@@ -1,9 +1,11 @@
 import { HeroSection } from "@/components/HeroSection";
+import { AboutSection } from "@/components/AboutSection";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <HeroSection />
+      <AboutSection />
       
       {/* Placeholder for additional sections */}
       <div className="min-h-screen bg-cinema-black flex items-center justify-center">
