@@ -5,22 +5,53 @@ export const useAppLoading = () => {
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   useEffect(() => {
-    // Check if this is the first visit
+    // Check if this is the first visit in this session
     const hasVisited = sessionStorage.getItem('hasVisited');
     
     if (hasVisited) {
-      // If user has already visited, skip loading
+      // If user has already visited in this session, skip loading
       setIsLoading(false);
       setHasLoadedOnce(true);
       return;
     }
 
     // Simulate loading time for assets and initial setup
-    const minLoadingTime = 3000; // Minimum 3 seconds for cinematic effect
+    const minLoadingTime = 3500; // Minimum 3.5 seconds for cinematic effect
     const startTime = Date.now();
 
-    // Wait for DOM to be fully loaded
-    const handleLoad = () => {
+    // Preload critical assets
+    const preloadAssets = async () => {
+      const promises: Promise<void>[] = [];
+
+      // Preload any critical images or resources
+      const criticalAssets = [
+        // Add any critical asset URLs here
+      ];
+
+      criticalAssets.forEach(src => {
+        const promise = new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => resolve(); // Still resolve to not block loading
+          img.src = src;
+        });
+        promises.push(promise);
+      });
+
+      // Wait for all assets to load or timeout
+      const assetTimeout = new Promise<void>(resolve => 
+        setTimeout(resolve, 2000) // 2 second timeout
+      );
+      
+      await Promise.race([
+        Promise.all(promises),
+        assetTimeout
+      ]);
+    };
+
+    const handleLoad = async () => {
+      await preloadAssets();
+      
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
       
@@ -31,7 +62,7 @@ export const useAppLoading = () => {
       }, remainingTime);
     };
 
-    // If document is already loaded, start the timer
+    // If document is already loaded, start the loading process
     if (document.readyState === 'complete') {
       handleLoad();
     } else {
