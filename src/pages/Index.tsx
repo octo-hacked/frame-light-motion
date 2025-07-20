@@ -1,11 +1,16 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { HeroSection } from "@/components/HeroSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen">
+      <HeroSection />
+      
+      {/* Placeholder for additional sections */}
+      <div className="min-h-screen bg-cinema-black flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-cinema-white mb-4">More Sections Coming Soon</h2>
+          <p className="text-xl text-cinema-white/70">This is where your portfolio content will expand</p>
+        </div>
       </div>
     </div>
   );
