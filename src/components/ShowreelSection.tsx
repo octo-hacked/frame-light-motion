@@ -62,10 +62,14 @@ const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
   const reelRef = useRef<THREE.Mesh>(null);
   const coreRef = useRef<THREE.Mesh>(null);
 
-  useFrame((state) => {
-    if (cubeRef.current) {
-      cubeRef.current.rotation.y = state.clock.elapsedTime * 0.5;
-      cubeRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
+    useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.6;
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.3;
+    }
+
+    if (reelRef.current) {
+      reelRef.current.rotation.z = state.clock.elapsedTime * 0.8;
     }
   });
 
