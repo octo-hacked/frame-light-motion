@@ -536,8 +536,8 @@ export const ShowreelSection = () => {
 
         {/* 3D Visualization with Robot */}
                 <div className="h-80 mb-12 rounded-lg overflow-hidden relative flex items-center">
-          <SpeechBubble activeCategory={activeCategory} />
-          <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
+                    <div className="flex-1 h-full">
+            <Canvas camera={{ position: [0, 1, 8], fov: 60 }}>
             <ambientLight intensity={0.4} />
             <pointLight position={[10, 10, 10]} intensity={1} color="#D4AF37" />
             <directionalLight position={[-10, -10, -5]} intensity={0.5} />
