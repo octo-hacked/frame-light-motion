@@ -77,7 +77,7 @@ const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
     const reelColor = currentCategory?.color || '#D4AF37';
 
   return (
-    <mesh ref={cubeRef}>
+        <group ref={groupRef}>
       <boxGeometry args={[1.5, 1.5, 1.5]} />
       <meshPhongMaterial 
         color={cubeColor} 
