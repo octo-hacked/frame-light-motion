@@ -57,7 +57,7 @@ const videoCategories = [
 ];
 
 // Simplified 3D Cube component 
-const FilmReel = ({ activeCategory }: { activeCategory: string }) => {
+const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
     const groupRef = useRef<THREE.Group>(null);
   const reelRef = useRef<THREE.Mesh>(null);
   const coreRef = useRef<THREE.Mesh>(null);
