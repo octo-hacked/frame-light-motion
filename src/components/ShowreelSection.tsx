@@ -92,7 +92,7 @@ const EditorBot = ({ activeCategory }: { activeCategory: string }) => {
         <group ref={groupRef}>
       <boxGeometry args={[1.5, 1.5, 1.5]} />
       <meshPhongMaterial 
-                color={reelColor} 
+                          color={robotColor} 
         transparent 
         opacity={0.8}
         shininess={100}
