@@ -1,26 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere } from '@react-three/drei';
-import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const Portrait3D = ({ isHovered }: { isHovered: boolean }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  return (
-    <Sphere ref={meshRef} args={[1, 32, 32]} scale={2}>
-      <meshStandardMaterial
-        color="#D4AF37"
-        wireframe={isHovered}
-        roughness={0.4}
-        metalness={0.8}
-      />
-    </Sphere>
-  );
-};
 
 const VideoLoop = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -238,19 +220,16 @@ export const AboutSection = () => {
           ref={rightPanelRef}
           className="w-1/2 relative flex flex-col"
         >
-          {/* 3D Portrait Section */}
+          {/* 3D Portrait Section - Temporarily simplified */}
           <div 
             ref={portraitRef}
-            className="h-1/2 relative cursor-pointer"
+            className="h-1/2 relative cursor-pointer bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center"
             onMouseEnter={() => setIsPortraitHovered(true)}
             onMouseLeave={() => setIsPortraitHovered(false)}
           >
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-              <ambientLight intensity={0.5} />
-              <directionalLight position={[2, 2, 2]} intensity={1} />
-              <Portrait3D isHovered={isPortraitHovered} />
-              <OrbitControls enableZoom={false} enablePan={false} />
-            </Canvas>
+            <div className="w-32 h-32 rounded-full bg-cinema-gold/30 flex items-center justify-center">
+              <div className="text-cinema-gold text-4xl">👤</div>
+            </div>
             
             {/* Overlay Info */}
             <div className="absolute top-6 left-6 z-10">
@@ -264,7 +243,7 @@ export const AboutSection = () => {
 
             {/* Hover Instruction */}
             <div className="absolute bottom-6 right-6 text-cinema-white/60 text-sm">
-              Hover to reveal wireframe
+              Hover for effect
             </div>
           </div>
 
