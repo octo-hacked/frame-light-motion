@@ -1,7 +1,8 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Float } from '@react-three/drei';
 import * as THREE from 'three';
+import { Lazy3D } from './LazyComponents';
 
 const CameraModel = () => {
   const meshRef = useRef<THREE.Mesh>(null);
