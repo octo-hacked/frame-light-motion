@@ -565,18 +565,20 @@ export const ShowreelSection = () => {
                 onHover={setHoveredTime}
               />
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <button 
+              <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+                <div className="flex items-center space-x-2 sm:space-x-4">
+                  <button
                     onClick={handlePrevious}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label="Previous video"
                   >
                     <SkipBack className="w-5 h-5" />
                   </button>
-                  
+
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="p-3 bg-cinema-gold text-cinema-black rounded-full hover:bg-cinema-gold/80 transition-colors"
+                    className="p-3 bg-cinema-gold text-cinema-black rounded-full hover:bg-cinema-gold/80 transition-colors touch-manipulation"
+                    aria-label={isPlaying ? "Pause" : "Play"}
                   >
                     {isPlaying ? (
                       <Pause className="w-5 h-5" />
@@ -584,17 +586,19 @@ export const ShowreelSection = () => {
                       <Play className="w-5 h-5 ml-0.5" />
                     )}
                   </button>
-                  
-                  <button 
+
+                  <button
                     onClick={handleNext}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label="Next video"
                   >
                     <SkipForward className="w-5 h-5" />
                   </button>
-                  
+
                   <button
                     onClick={() => setIsMuted(!isMuted)}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label={isMuted ? "Unmute" : "Mute"}
                   >
                     {isMuted ? (
                       <VolumeX className="w-5 h-5" />
@@ -604,7 +608,7 @@ export const ShowreelSection = () => {
                   </button>
                 </div>
 
-                <div className="text-cinema-white/60 text-sm">
+                <div className="text-cinema-white/60 text-xs sm:text-sm text-center sm:text-right">
                   {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Professional editing showcase'}
                 </div>
               </div>
