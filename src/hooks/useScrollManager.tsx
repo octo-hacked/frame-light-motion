@@ -1,48 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from '@studio-freight/lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const useScrollManager = () => {
-  const lenisRef = useRef<Lenis | null>(null);
-
   useEffect(() => {
-    // Initialize Lenis with more conservative settings to avoid conflicts
-    const lenis = new Lenis({
-      duration: 1.0,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false, // Disable for now to prevent conflicts
-      touchMultiplier: 1,
-      infinite: false,
-      autoResize: true,
-      wrapper: window,
-      content: document.documentElement,
-    });
-
-    lenisRef.current = lenis;
-
-    // Connect Lenis with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    // RAF for Lenis
-    const raf = (time: number) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-
-    // Refresh ScrollTrigger when the hook mounts
+    // Simple setup - just refresh ScrollTrigger when the hook mounts
     ScrollTrigger.refresh();
 
     return () => {
-      // Clean up
-      lenis.destroy();
+      // Clean up all ScrollTrigger instances when unmounting
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -51,7 +19,6 @@ export const useScrollManager = () => {
     return ScrollTrigger.create({
       ...config,
       invalidateOnRefresh: true,
-      // Don't override scroller - let it use default
     });
   };
 
@@ -60,13 +27,20 @@ export const useScrollManager = () => {
   };
 
   const scrollTo = (target: string | number, options?: any) => {
-    lenisRef.current?.scrollTo(target, options);
+    // Simple scroll to implementation
+    if (typeof target === 'string') {
+      const element = document.querySelector(target);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    }
   };
 
   return {
     createScrollTrigger,
     refreshScrollTrigger,
     scrollTo,
-    lenis: lenisRef.current,
   };
 };
