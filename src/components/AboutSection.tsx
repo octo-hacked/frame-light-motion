@@ -176,7 +176,28 @@ const BioContent = () => {
       {/* Skills Section */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
-        <div className="space-y-4">
+
+        {/* Mobile: 2 cards per row */}
+        <div className="md:hidden grid grid-cols-2 gap-3">
+          {skills.map((skill, index) => (
+            <div key={index} className="group bg-cinema-white/5 rounded-lg p-3 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300">
+              <div className="text-center mb-3">
+                <div className="text-2xl mb-2">{skill.icon}</div>
+                <div className="text-cinema-white/90 text-sm font-medium mb-1">{skill.name}</div>
+                <div className="text-cinema-gold font-bold text-lg">{skill.level}%</div>
+              </div>
+              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: Original layout */}
+        <div className="hidden md:block space-y-4">
           {skills.map((skill, index) => (
             <div key={index} className="group">
               <div className="flex items-center justify-between mb-2">
@@ -200,13 +221,13 @@ const BioContent = () => {
       {/* Achievements */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {achievements.map((achievement, index) => (
             <div
               key={index}
-              className="bg-cinema-white/5 rounded-lg p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
+              className="bg-cinema-white/5 rounded-lg p-3 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
             >
-              <div className="text-cinema-white/80 text-sm text-center group-hover:text-cinema-gold transition-colors">
+              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight">
                 {achievement}
               </div>
             </div>
