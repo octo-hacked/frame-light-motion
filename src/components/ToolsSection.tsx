@@ -16,7 +16,7 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Tool data with skill levels and details
+// Tool data
 const tools = [
   {
     id: 'premiere',
@@ -37,8 +37,8 @@ const tools = [
     skillLevel: 90,
     experience: '7+ years',
     icon: Layers,
-    color: '#9999FF',
-    gradient: ['#9999FF', '#CC99FF', '#FF99CC'],
+    color: '#CC99FF',
+    gradient: ['#CC99FF', '#9999FF', '#FF99CC'],
     projects: ['Logo animations', 'Title sequences', 'Visual effects', 'Compositing'],
     features: ['Complex compositing', 'Motion tracking', 'Expression scripting', 'Plugin development']
   },
@@ -92,7 +92,7 @@ const tools = [
   }
 ];
 
-// Tool Card Component
+// Simple Tool Card Component
 const ToolCard = ({ 
   tool, 
   index, 
@@ -110,119 +110,65 @@ const ToolCard = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const gearRef = useRef<HTMLDivElement>(null);
-  const sparksRef = useRef<HTMLDivElement>(null);
   const IconComponent = tool.icon;
 
+  // Simple entrance animation
   useEffect(() => {
     const card = cardRef.current;
     if (!card) return;
 
-    // Entrance animation
-    gsap.fromTo(card,
-      { 
-        opacity: 0, 
-        y: 50,
-        scale: 0.9 
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        delay: index * 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 90%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
+    // Simple fade-in animation
+    gsap.set(card, { opacity: 0, y: 30 });
+    gsap.to(card, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      delay: index * 0.1,
+      ease: "power2.out"
+    });
   }, [index]);
 
+  // Hover effects
   useEffect(() => {
     const gear = gearRef.current;
-    const sparks = sparksRef.current;
     
     if (isHovered && gear) {
-      // Gear spinning animation
       gsap.to(gear, {
         rotation: 360,
-        duration: 2,
+        duration: 1,
         ease: "none",
         repeat: -1
       });
 
-      // Card hover effect
       gsap.to(cardRef.current, {
-        y: -10,
-        scale: 1.05,
+        y: -5,
+        scale: 1.02,
         duration: 0.3,
         ease: "power2.out"
       });
-
-      // Electric sparks
-      if (sparks) {
-        gsap.fromTo(sparks.children, 
-          { scale: 0, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.3,
-            stagger: 0.1,
-            ease: "back.out(1.7)"
-          }
-        );
-      }
-
     } else if (gear) {
-      gsap.killTweensOf([gear, cardRef.current]);
-      
+      gsap.killTweensOf(gear);
       gsap.to(cardRef.current, {
         y: 0,
         scale: 1,
         duration: 0.3,
         ease: "power2.out"
       });
-
-      if (sparks) {
-        gsap.to(sparks.children, {
-          scale: 0,
-          opacity: 0,
-          duration: 0.2
-        });
-      }
     }
   }, [isHovered]);
 
   return (
     <div
       ref={cardRef}
-      className="relative w-64 h-72 cursor-pointer transform-gpu bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-6 hover:border-white/40 transition-all duration-300"
+      className="relative w-72 h-80 cursor-pointer bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-6 transition-all duration-300"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onClick={onClick}
       style={{ 
         background: `linear-gradient(135deg, ${tool.color}15, transparent)`,
-        boxShadow: isHovered ? `0 20px 40px ${tool.color}20` : '0 10px 30px rgba(0,0,0,0.3)'
+        borderColor: isHovered ? `${tool.color}60` : 'rgba(255,255,255,0.2)'
       }}
     >
-      {/* Electric Sparks */}
-      <div ref={sparksRef} className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full opacity-0"
-            style={{
-              background: tool.color,
-              top: `${20 + Math.random() * 60}%`,
-              left: `${20 + Math.random() * 60}%`,
-              boxShadow: `0 0 8px ${tool.color}`
-            }}
-          />
-        ))}
-      </div>
-
       {/* Gear Animation */}
       <div 
         ref={gearRef}
@@ -232,32 +178,32 @@ const ToolCard = ({
       </div>
 
       {/* Tool Icon */}
-      <div className="flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center mb-6">
         <div 
-          className="w-14 h-14 rounded-full flex items-center justify-center"
+          className="w-16 h-16 rounded-full flex items-center justify-center"
           style={{ 
             background: `linear-gradient(135deg, ${tool.color}, ${tool.gradient[1]})`,
             boxShadow: `0 8px 32px ${tool.color}40`
           }}
         >
-          <IconComponent className="w-7 h-7 text-white" />
+          <IconComponent className="w-8 h-8 text-white" />
         </div>
       </div>
 
       {/* Tool Info */}
       <div className="text-center">
-        <h3 className="text-lg font-bold text-white mb-1">{tool.name}</h3>
-        <p className="text-white/70 text-sm mb-3">{tool.category}</p>
+        <h3 className="text-lg font-bold text-white mb-2">{tool.name}</h3>
+        <p className="text-white/70 text-sm mb-4">{tool.category}</p>
         
         {/* Skill Level */}
-        <div className="mb-3">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-white/80 text-xs">Skill Level</span>
-            <span className="text-white font-bold text-xs">{tool.skillLevel}%</span>
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-white/80 text-sm">Skill Level</span>
+            <span className="text-white font-bold text-sm">{tool.skillLevel}%</span>
           </div>
-          <div className="w-full bg-white/20 rounded-full h-1.5">
+          <div className="w-full bg-white/20 rounded-full h-2">
             <div 
-              className="h-1.5 rounded-full transition-all duration-1000"
+              className="h-2 rounded-full transition-all duration-1000"
               style={{ 
                 width: `${tool.skillLevel}%`,
                 background: `linear-gradient(90deg, ${tool.color}, ${tool.gradient[1]})`
@@ -268,62 +214,90 @@ const ToolCard = ({
 
         {/* Experience */}
         <div className="text-center">
-          <div className="text-white/60 text-xs">Experience</div>
-          <div className="text-white font-semibold text-sm">{tool.experience}</div>
+          <div className="text-white/60 text-sm">Experience</div>
+          <div className="text-white font-semibold">{tool.experience}</div>
+        </div>
+
+        {/* Click hint */}
+        <div className="mt-4 text-white/50 text-xs">
+          Click to see details
         </div>
       </div>
+
+      {/* Hover glow effect */}
+      {isHovered && (
+        <div 
+          className="absolute inset-0 rounded-xl opacity-20 pointer-events-none"
+          style={{ 
+            boxShadow: `0 0 30px ${tool.color}`,
+            background: `radial-gradient(circle at center, ${tool.color}20, transparent 70%)`
+          }}
+        />
+      )}
     </div>
   );
 };
 
-// Tool Details Modal (simplified)
+// Tool Details Modal
 const ToolDetailsModal = ({ tool, isOpen, onClose }: { tool: any; isOpen: boolean; onClose: () => void }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isOpen && modalRef.current) {
-      gsap.fromTo(modalRef.current,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
-      );
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
+  if (!isOpen || !tool) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div 
-        ref={modalRef}
-        className="relative max-w-2xl w-full bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-6"
-      >
+      <div className="relative max-w-2xl w-full bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <div 
-              className="w-10 h-10 rounded-full flex items-center justify-center"
+              className="w-12 h-12 rounded-full flex items-center justify-center"
               style={{ background: `linear-gradient(135deg, ${tool.color}, ${tool.gradient[1]})` }}
             >
-              <tool.icon className="w-5 h-5 text-white" />
+              <tool.icon className="w-6 h-6 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">{tool.name}</h2>
-              <p className="text-white/70 text-sm">{tool.category}</p>
+              <p className="text-white/70">{tool.category}</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="text-white/60 hover:text-white transition-colors p-1"
+            className="text-white/60 hover:text-white transition-colors p-2"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Skill & Experience */}
+          <div>
+            <h3 className="text-white font-semibold mb-3">Proficiency</h3>
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-white/80">Skill Level</span>
+                  <span className="text-white font-bold">{tool.skillLevel}%</span>
+                </div>
+                <div className="w-full bg-white/20 rounded-full h-2">
+                  <div 
+                    className="h-2 rounded-full"
+                    style={{ 
+                      width: `${tool.skillLevel}%`,
+                      background: `linear-gradient(90deg, ${tool.color}, ${tool.gradient[1]})`
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white/80">Experience</span>
+                <span className="text-white font-semibold">{tool.experience}</span>
+              </div>
+            </div>
+          </div>
+
           {/* Projects */}
           <div>
-            <h3 className="text-white font-semibold mb-2">Projects Used In</h3>
+            <h3 className="text-white font-semibold mb-3">Projects Used In</h3>
             <div className="grid grid-cols-2 gap-2">
               {tool.projects.map((project: string, idx: number) => (
                 <div 
@@ -338,12 +312,12 @@ const ToolDetailsModal = ({ tool, isOpen, onClose }: { tool: any; isOpen: boolea
 
           {/* Features */}
           <div>
-            <h3 className="text-white font-semibold mb-2">Key Features</h3>
-            <div className="space-y-1">
+            <h3 className="text-white font-semibold mb-3">Key Features</h3>
+            <div className="space-y-2">
               {tool.features.map((feature: string, idx: number) => (
                 <div key={idx} className="flex items-center space-x-2">
-                  <Star className="w-3 h-3" style={{ color: tool.color }} />
-                  <span className="text-white/80 text-sm">{feature}</span>
+                  <Star className="w-4 h-4" style={{ color: tool.color }} />
+                  <span className="text-white/80">{feature}</span>
                 </div>
               ))}
             </div>
@@ -358,25 +332,6 @@ export const ToolsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [hoveredTool, setHoveredTool] = useState<string | null>(null);
   const [selectedTool, setSelectedTool] = useState<any | null>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    gsap.fromTo(section,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 1.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  }, []);
 
   const handleToolClick = (tool: any) => {
     setSelectedTool(tool);
@@ -399,7 +354,7 @@ export const ToolsSection = () => {
           </p>
         </div>
 
-        {/* Tools Grid */}
+        {/* Tools Grid - Now Always Visible */}
         <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {tools.map((tool, index) => (
