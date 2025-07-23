@@ -263,23 +263,23 @@ const ChatBubble = ({
   }, [isVisible, testimonial.text]);
 
   return (
-    <div className="bg-gray-800 rounded-2xl rounded-bl-sm p-6 shadow-xl relative max-w-2xl">
+    <div className="bg-gray-800 rounded-xl md:rounded-2xl rounded-bl-sm p-4 md:p-6 shadow-xl relative max-w-2xl mx-4 md:mx-0">
       {/* Avatar */}
-      <div className="flex items-start space-x-4 mb-4">
-        <div className="w-12 h-12 bg-gradient-to-br from-cinema-gold to-cinema-orange rounded-full flex items-center justify-center text-2xl">
+      <div className="flex items-start space-x-3 md:space-x-4 mb-3 md:mb-4">
+        <div className="w-10 md:w-12 h-10 md:h-12 bg-gradient-to-br from-cinema-gold to-cinema-orange rounded-full flex items-center justify-center text-lg md:text-2xl">
           {testimonial.avatar}
         </div>
         <div>
-          <h4 className="text-white font-semibold">{testimonial.name}</h4>
-          <p className="text-gray-400 text-sm">{testimonial.position} at {testimonial.company}</p>
+          <h4 className="text-white font-semibold text-sm md:text-base">{testimonial.name}</h4>
+          <p className="text-gray-400 text-xs md:text-sm">{testimonial.position} at {testimonial.company}</p>
         </div>
       </div>
 
       {/* Message */}
-      <div className="text-gray-300 leading-relaxed mb-4">
+      <div className="text-gray-300 leading-relaxed mb-3 md:mb-4 text-sm md:text-base">
         {displayedText}
         {isTyping && (
-          <span className="inline-block w-0.5 h-5 bg-cinema-gold ml-1 animate-pulse" />
+          <span className="inline-block w-0.5 h-4 md:h-5 bg-cinema-gold ml-1 animate-pulse" />
         )}
       </div>
 
@@ -339,16 +339,16 @@ const VideoTestimonialReel = ({
   };
 
   return (
-    <div className={`relative w-80 h-96 rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 ${
-      isActive ? 'scale-105' : 'scale-95 opacity-70'
+    <div className={`relative w-full max-w-80 h-64 md:h-96 rounded-xl md:rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 ${
+      isActive ? 'md:scale-105' : 'md:scale-95 md:opacity-70'
     }`}>
       {/* Video Container */}
       <div className="relative w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
         {/* Mock Video Content */}
         <div className="text-center">
-          <div className="text-6xl mb-4">{testimonial.avatar}</div>
-          <h3 className="text-white text-lg font-semibold mb-2">{testimonial.name}</h3>
-          <p className="text-gray-400 text-sm">{testimonial.company}</p>
+          <div className="text-3xl md:text-6xl mb-2 md:mb-4">{testimonial.avatar}</div>
+          <h3 className="text-white text-sm md:text-lg font-semibold mb-1 md:mb-2">{testimonial.name}</h3>
+          <p className="text-gray-400 text-xs md:text-sm">{testimonial.company}</p>
         </div>
 
         {/* Play/Pause Button */}
@@ -356,41 +356,43 @@ const VideoTestimonialReel = ({
           onClick={handlePlayToggle}
           className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity duration-300"
         >
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+          <div className="w-12 md:w-16 h-12 md:h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
             {isPlaying ? (
-              <Pause className="w-6 h-6 text-white" />
+              <Pause className="w-4 md:w-6 h-4 md:h-6 text-white" />
             ) : (
-              <Play className="w-6 h-6 text-white ml-1" />
+              <Play className="w-4 md:w-6 h-4 md:h-6 text-white ml-1" />
             )}
           </div>
         </button>
 
         {/* Controls Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 md:p-4">
           {/* Waveform */}
-          <Waveform 
-            waveformData={testimonial.waveform}
-            isPlaying={isPlaying}
-            progress={progress}
-          />
+          <div className="hidden md:block">
+            <Waveform
+              waveformData={testimonial.waveform}
+              isPlaying={isPlaying}
+              progress={progress}
+            />
+          </div>
           
           {/* Controls */}
-          <div className="flex items-center justify-between mt-2">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between mt-1 md:mt-2">
+            <div className="flex items-center space-x-1 md:space-x-2">
               <button
                 onClick={handlePlayToggle}
                 className="p-1 text-white hover:text-cinema-gold transition-colors"
               >
                 {isPlaying ? (
-                  <Pause className="w-4 h-4" />
+                  <Pause className="w-3 md:w-4 h-3 md:h-4" />
                 ) : (
-                  <Play className="w-4 h-4" />
+                  <Play className="w-3 md:w-4 h-3 md:h-4" />
                 )}
               </button>
-              
+
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className="p-1 text-white hover:text-cinema-gold transition-colors"
+                className="p-1 text-white hover:text-cinema-gold transition-colors hidden md:block"
               >
                 {isMuted ? (
                   <VolumeX className="w-4 h-4" />
@@ -398,11 +400,11 @@ const VideoTestimonialReel = ({
                   <Volume2 className="w-4 h-4" />
                 )}
               </button>
-              
+
               <span className="text-xs text-white/70">{testimonial.duration}</span>
             </div>
 
-            <Quote className="w-4 h-4 text-cinema-gold" />
+            <Quote className="w-3 md:w-4 h-3 md:h-4 text-cinema-gold" />
           </div>
         </div>
 
@@ -523,17 +525,17 @@ export const ClientsTestimonialsSection = () => {
         <ClientLogoCarousel />
       </div>
 
-      {/* 3D Brand Wall */}
-      <div className="h-64 mb-20 relative">
+      {/* 3D Brand Wall - Hidden on mobile for performance */}
+      <div className="hidden md:block h-64 mb-20 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-cinema-black via-transparent to-cinema-black z-10 pointer-events-none" />
         <Canvas camera={{ position: [0, 0, 15], fov: 60 }}>
           <ambientLight intensity={0.4} />
           <pointLight position={[10, 10, 10]} intensity={0.8} />
           <BrandWall3D />
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false} 
-            autoRotate 
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            autoRotate
             autoRotateSpeed={0.5}
           />
         </Canvas>
@@ -549,7 +551,45 @@ export const ClientsTestimonialsSection = () => {
             <h3 className="text-2xl font-semibold text-white">Video Testimonials</h3>
           </div>
           
-          <div className="flex items-center justify-center space-x-8">
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="px-4 mb-4">
+              <div className="w-full max-w-sm mx-auto">
+                <VideoTestimonialReel
+                  testimonial={testimonials[activeTestimonial]}
+                  isActive={true}
+                  onPlayToggle={() => {}}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-center space-x-4">
+              <button
+                onClick={prevTestimonial}
+                className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <div className="flex space-x-2">
+                {testimonials.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === activeTestimonial ? 'bg-cinema-gold' : 'bg-gray-600'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={nextTestimonial}
+                className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center justify-center space-x-8">
             <button
               onClick={prevTestimonial}
               className="p-3 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors"
