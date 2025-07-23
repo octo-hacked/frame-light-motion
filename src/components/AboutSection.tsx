@@ -1,32 +1,105 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VideoLoop = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
+// 3D Portrait Mesh Component
+const PortraitMesh = ({ morphProgress }: { morphProgress: number }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play();
+    if (meshRef.current && morphProgress > 0) {
+      const geometry = meshRef.current.geometry as THREE.SphereGeometry;
+      const positionAttribute = geometry.attributes.position;
+      const vertices = positionAttribute.array as Float32Array;
+      
+      // Apply wireframe morphing effect
+      for (let i = 0; i < vertices.length; i += 3) {
+        const x = vertices[i];
+        const y = vertices[i + 1];
+        const z = vertices[i + 2];
+        
+        // Morphing calculation based on progress
+        const noise = Math.sin(x * 3 + y * 3 + Date.now() * 0.003) * morphProgress * 0.15;
+        vertices[i + 2] = z + noise;
+      }
+      
+      positionAttribute.needsUpdate = true;
     }
-  }, []);
+  }, [morphProgress]);
 
   return (
-    <video
-      ref={videoRef}
-      className="w-full h-full object-cover rounded-lg opacity-80"
-      loop
-      muted
-      playsInline
-      autoPlay
-    >
-      {/* Placeholder for video - would be actual editing footage */}
-      <source src="/editing-workspace.mp4" type="video/mp4" />
-      {/* Fallback gradient for demo */}
-      <div className="w-full h-full bg-gradient-lens opacity-50" />
-    </video>
+    <mesh ref={meshRef} rotation={[0, 0, 0]} scale={1.5}>
+      <sphereGeometry args={[1.5, 32, 32]} />
+      <meshPhongMaterial 
+        color="#D4AF37" 
+        wireframe={morphProgress > 0.3}
+        transparent
+        opacity={0.8}
+        shininess={100}
+      />
+    </mesh>
+  );
+};
+
+const VideoSnippet = ({ src, delay = 0 }: { src: string; delay?: number }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Stagger animation for video snippets
+    gsap.fromTo(container, 
+      { opacity: 0, scale: 0.8, y: 30 },
+      { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0, 
+        duration: 0.8, 
+        delay,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: container,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+  }, [delay]);
+
+  const getContent = () => {
+    switch(src) {
+      case 'timeline': return { icon: '🎬', text: 'Timeline Editing' };
+      case 'color': return { icon: '����', text: 'Color Grading' };
+      case 'effects': return { icon: '✨', text: 'Visual Effects' };
+      case 'audio': return { icon: '🎵', text: 'Audio Mixing' };
+      default: return { icon: '📹', text: 'Video Work' };
+    }
+  };
+
+  const content = getContent();
+
+  return (
+    <div ref={containerRef} className="relative h-24 rounded-lg overflow-hidden shadow-film bg-cinema-black/20 hover:bg-cinema-black/40 transition-all duration-300">
+      {/* Simulated video content with gradient */}
+      <div className="w-full h-full bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/10 flex items-center justify-center">
+        <div className="text-cinema-white/70 text-xs text-center px-2">
+          <div className="text-lg mb-1">{content.icon}</div>
+          <div className="font-light">{content.text}</div>
+        </div>
+      </div>
+      
+      {/* Play indicator */}
+      <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+      
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-cinema-gold/10 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+    </div>
   );
 };
 
@@ -69,57 +142,105 @@ const AnimatedWord = ({ word, index }: { word: string; index: number }) => {
   );
 };
 
-const BioTimeline = () => {
-  const timelineItems = [
-    {
-      year: "2018",
-      title: "The Beginning",
-      description: "Started my journey into video editing with a passion for storytelling and visual narrative."
-    },
-    {
-      year: "2020",
-      title: "Professional Growth",
-      description: "Expanded into commercial work, collaborating with brands and creators to bring their visions to life."
-    },
-    {
-      year: "2022",
-      title: "Cinematic Focus",
-      description: "Specialized in cinematic editing techniques, mastering color grading and advanced post-production workflows."
-    },
-    {
-      year: "2024",
-      title: "Today",
-      description: "Continuing to push creative boundaries while delivering exceptional results for every project."
-    }
-  ];
-
+const BioContent = () => {
   const bioText = "I'm a passionate video editor who believes every frame tells a story. With years of experience crafting compelling narratives, I specialize in transforming raw footage into cinematic masterpieces that captivate audiences and bring visions to life.".split(' ');
 
+  const skills = [
+    { name: "Video Editing", level: 95, icon: "🎬" },
+    { name: "Color Grading", level: 90, icon: "🎨" },
+    { name: "Motion Graphics", level: 85, icon: "✨" },
+    { name: "Audio Post", level: 88, icon: "🎵" },
+    { name: "3D Animation", level: 80, icon: "🎯" },
+    { name: "Storytelling", level: 92, icon: "📖" }
+  ];
+
+  const achievements = [
+    "300+ Projects Completed",
+    "50+ Happy Clients",
+    "8+ Years Experience",
+    "Award-Winning Work"
+  ];
+
   return (
-    <div className="space-y-12">
-      {/* Bio Paragraph with word-by-word animation */}
-      <div className="mb-16">
-        <h3 className="text-2xl font-light text-cinema-gold mb-6">About Me</h3>
-        <p className="text-lg text-cinema-white/80 leading-relaxed">
+    <div className="space-y-8">
+      {/* Bio Paragraph */}
+      <div className="mb-8">
+        <h3 className="text-3xl font-light text-cinema-gold mb-6">About Me</h3>
+        <p className="text-lg text-cinema-white/80 leading-relaxed mb-8">
           {bioText.map((word, index) => (
             <AnimatedWord key={index} word={word} index={index} />
           ))}
         </p>
       </div>
 
-      {/* Timeline */}
-      <div className="space-y-8">
-        <h3 className="text-2xl font-light text-cinema-gold mb-8">My Journey</h3>
-        {timelineItems.map((item, index) => (
-          <div key={index} className="relative pl-8 border-l border-cinema-gold/30">
-            <div className="absolute -left-2 w-4 h-4 bg-cinema-gold rounded-full" />
-            <div className="timeline-item">
-              <div className="text-cinema-gold font-semibold text-sm mb-1">{item.year}</div>
-              <h4 className="text-cinema-white font-medium text-lg mb-2">{item.title}</h4>
-              <p className="text-cinema-white/70 text-sm leading-relaxed">{item.description}</p>
+      {/* Skills Section */}
+      <div className="mb-8">
+        <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
+
+        {/* Mobile: 2 cards per row */}
+        <div className="md:hidden grid grid-cols-2 gap-3">
+          {skills.map((skill, index) => (
+            <div key={index} className="group bg-cinema-white/5 rounded-lg p-3 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300">
+              <div className="text-center mb-3">
+                <div className="text-2xl mb-2">{skill.icon}</div>
+                <div className="text-cinema-white/90 text-sm font-medium mb-1">{skill.name}</div>
+                <div className="text-cinema-gold font-bold text-lg">{skill.level}%</div>
+              </div>
+              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Desktop: Original layout */}
+        <div className="hidden md:block space-y-4">
+          {skills.map((skill, index) => (
+            <div key={index} className="group">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">{skill.icon}</span>
+                  <span className="text-cinema-white/90 font-medium">{skill.name}</span>
+                </div>
+                <span className="text-cinema-gold font-bold">{skill.level}%</span>
+              </div>
+              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Achievements */}
+      <div className="mb-8">
+        <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
+          {achievements.map((achievement, index) => (
+            <div
+              key={index}
+              className="bg-cinema-white/5 rounded-lg p-3 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
+            >
+              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight">
+                {achievement}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Philosophy */}
+      <div className="bg-gradient-to-r from-cinema-gold/10 to-cinema-orange/10 rounded-lg p-6 border border-cinema-gold/20">
+        <h4 className="text-lg font-semibold text-cinema-gold mb-3">My Philosophy</h4>
+        <p className="text-cinema-white/80 text-sm leading-relaxed italic">
+          "Every project is a chance to tell a unique story. I don't just edit videos—I craft experiences that resonate with audiences and bring creative visions to life through the power of cinematic storytelling."
+        </p>
       </div>
     </div>
   );
@@ -154,7 +275,7 @@ export const AboutSection = () => {
       onUpdate: (self) => {
         const progress = self.progress;
         gsap.set(leftPanel, {
-          yPercent: -20 * progress, // Reduced movement
+          yPercent: -15 * progress,
           ease: "none"
         });
       }
@@ -162,36 +283,21 @@ export const AboutSection = () => {
     
     scrollTriggersRef.current.push(leftPanelTrigger);
 
-    // Depth of field effect setup
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = portrait.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const distance = Math.sqrt(x * x + y * y);
-      const maxDistance = Math.sqrt(rect.width * rect.width + rect.height * rect.height) / 2;
-      const blur = Math.min(distance / maxDistance * 10, 10);
-      
-      gsap.to(portrait, {
-        filter: `blur(${blur}px)`,
-        duration: 0.3,
-        ease: "power2.out"
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(portrait, {
-        filter: "blur(0px)",
-        duration: 0.5,
-        ease: "power2.out"
-      });
-    };
-
-    portrait.addEventListener('mousemove', handleMouseMove);
-    portrait.addEventListener('mouseleave', handleMouseLeave);
+    // Section entrance animation
+    gsap.fromTo(section, 
+      { opacity: 0 },
+      { 
+        opacity: 1, 
+        duration: 1, 
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
 
     return () => {
-      portrait.removeEventListener('mousemove', handleMouseMove);
-      portrait.removeEventListener('mouseleave', handleMouseLeave);
       // Clean up only this section's scroll triggers
       scrollTriggersRef.current.forEach(trigger => trigger.kill());
       scrollTriggersRef.current = [];
@@ -199,66 +305,171 @@ export const AboutSection = () => {
   }, []);
 
   return (
-    <section 
+    <section
       ref={sectionRef}
       className="min-h-screen bg-cinema-black relative overflow-hidden"
     >
-      {/* Split Screen Layout */}
-      <div className="flex h-screen">
-        
-        {/* Left Panel - Bio Timeline */}
-        <div 
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* Mobile Hero */}
+        <div className="h-screen px-6 py-12 flex flex-col">
+          <div
+            ref={portraitRef}
+            className="flex-1 relative cursor-pointer bg-gradient-to-br from-cinema-black via-cinema-black/90 to-cinema-gold/10 flex items-center justify-center rounded-lg mb-6"
+            onTouchStart={() => setIsPortraitHovered(true)}
+            onTouchEnd={() => setIsPortraitHovered(false)}
+          >
+            <div className="absolute inset-0">
+              <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <pointLight position={[10, 10, 10]} intensity={1.2} color="#D4AF37" />
+                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#FFA500" />
+                <PortraitMesh morphProgress={isPortraitHovered ? 1 : 0} />
+                <OrbitControls
+                  enableZoom={false}
+                  enablePan={false}
+                  autoRotate
+                  autoRotateSpeed={isPortraitHovered ? 2 : 0.5}
+                  maxPolarAngle={Math.PI / 1.5}
+                  minPolarAngle={Math.PI / 3}
+                />
+              </Canvas>
+            </div>
+
+            <div className="absolute top-4 left-4 z-10">
+              <h2 className="text-xl font-light text-cinema-white mb-1">
+                The Editor Behind
+              </h2>
+              <h2 className="text-xl font-bold bg-gradient-cinematic bg-clip-text text-transparent">
+                The Magic
+              </h2>
+            </div>
+
+            <div className="absolute bottom-4 right-4 text-cinema-white/60 text-xs">
+              Tap to interact
+            </div>
+          </div>
+
+          <div className="bg-cinema-white/5 rounded-lg p-4 border border-cinema-white/10">
+            <h3 className="text-lg font-light text-cinema-gold mb-2">About Me</h3>
+            <p className="text-cinema-white/80 text-sm leading-relaxed">
+              Passionate video editor specializing in cinematic storytelling.
+            </p>
+          </div>
+        </div>
+
+        {/* Mobile Content */}
+        <div className="px-6 py-8">
+          <BioContent />
+        </div>
+
+        {/* Mobile Video Snippets */}
+        <div className="px-6 py-8">
+          <h3 className="text-cinema-gold text-lg font-light mb-6 text-center">
+            Silent Work Sessions
+          </h3>
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <VideoSnippet src="timeline" delay={0} />
+            <VideoSnippet src="color" delay={0.2} />
+            <VideoSnippet src="effects" delay={0.4} />
+            <VideoSnippet src="audio" delay={0.6} />
+          </div>
+          <div className="text-center">
+            <p className="text-cinema-white/60 text-xs">
+              Live editing sessions • Silent workflow • Behind the scenes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-screen">
+        {/* Left Panel - Bio Content */}
+        <div
           ref={leftPanelRef}
-          className="w-1/2 p-12 overflow-y-auto scrollbar-hide"
+          className="w-1/2 p-8 lg:p-12 overflow-y-auto scrollbar-hide"
           style={{ scrollSnapType: 'y mandatory' }}
         >
-          <div className="max-w-lg mx-auto pt-20">
-            <BioTimeline />
+          <div className="max-w-lg mx-auto pt-16">
+            <BioContent />
           </div>
         </div>
 
         {/* Right Panel - 3D Portrait & Video */}
-        <div 
+        <div
           ref={rightPanelRef}
           className="w-1/2 relative flex flex-col"
         >
-          {/* 3D Portrait Section - Temporarily simplified */}
+          {/* 3D Portrait Section with Three.js */}
           <div 
             ref={portraitRef}
-            className="h-1/2 relative cursor-pointer bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/20 flex items-center justify-center"
+            className="h-3/5 relative cursor-pointer bg-gradient-to-br from-cinema-black via-cinema-black/90 to-cinema-gold/10 flex items-center justify-center"
             onMouseEnter={() => setIsPortraitHovered(true)}
             onMouseLeave={() => setIsPortraitHovered(false)}
           >
-            <div className="w-32 h-32 rounded-full bg-cinema-gold/30 flex items-center justify-center">
-              <div className="text-cinema-gold text-4xl">👤</div>
+            {/* 3D Canvas */}
+            <div className="absolute inset-0">
+              <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <pointLight position={[10, 10, 10]} intensity={1.2} color="#D4AF37" />
+                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#FFA500" />
+                <PortraitMesh morphProgress={isPortraitHovered ? 1 : 0} />
+                <OrbitControls 
+                  enableZoom={false} 
+                  enablePan={false} 
+                  autoRotate 
+                  autoRotateSpeed={isPortraitHovered ? 2 : 0.5}
+                  maxPolarAngle={Math.PI / 1.5}
+                  minPolarAngle={Math.PI / 3}
+                />
+              </Canvas>
             </div>
             
             {/* Overlay Info */}
             <div className="absolute top-6 left-6 z-10">
-              <h2 className="text-3xl font-light text-cinema-white mb-2">
+              <h2 className="text-2xl md:text-3xl font-light text-cinema-white mb-2">
                 The Editor Behind
               </h2>
-              <h2 className="text-3xl font-bold bg-gradient-cinematic bg-clip-text text-transparent">
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-cinematic bg-clip-text text-transparent">
                 The Magic
               </h2>
             </div>
 
             {/* Hover Instruction */}
             <div className="absolute bottom-6 right-6 text-cinema-white/60 text-sm">
-              Hover for effect
-            </div>
-          </div>
-
-          {/* Video Loop Section */}
-          <div className="h-1/2 p-6 bg-cinema-black/50">
-            <div className="h-full rounded-lg overflow-hidden shadow-film">
-              <VideoLoop />
+              Hover to morph
             </div>
             
-            {/* Video Caption */}
-            <div className="mt-4 text-center">
-              <p className="text-cinema-white/70 text-sm">
-                Behind the scenes: Crafting the perfect edit
+            {/* Depth of field overlay */}
+            <div 
+              className="absolute inset-0 pointer-events-none transition-all duration-700" 
+              style={{ 
+                backdropFilter: isPortraitHovered ? 'blur(3px)' : 'blur(0px)',
+                background: isPortraitHovered 
+                  ? 'radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.4) 80%)' 
+                  : 'transparent'
+              }} 
+            />
+          </div>
+
+          {/* Video Snippets Section */}
+          <div className="h-2/5 p-6 bg-cinema-black/90">
+            <h3 className="text-cinema-gold text-lg font-light mb-6 text-center">
+              Silent Work Sessions
+            </h3>
+            
+            {/* Grid of video snippets */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <VideoSnippet src="timeline" delay={0} />
+              <VideoSnippet src="color" delay={0.2} />
+              <VideoSnippet src="effects" delay={0.4} />
+              <VideoSnippet src="audio" delay={0.6} />
+            </div>
+            
+            {/* Caption */}
+            <div className="text-center">
+              <p className="text-cinema-white/60 text-xs">
+                Live editing sessions • Silent workflow • Behind the scenes
               </p>
             </div>
           </div>

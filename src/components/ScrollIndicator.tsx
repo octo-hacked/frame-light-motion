@@ -48,7 +48,7 @@ export const ScrollIndicator = () => {
   return (
     <div 
       ref={indicatorRef}
-      className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer"
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer"
       onClick={handleScrollClick}
     >
       <div className="flex flex-col items-center space-y-2">

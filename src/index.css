@@ -156,9 +156,20 @@ All colors MUST be HSL.
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Mobile touch optimizations */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Smooth horizontal scrolling for mobile carousels */
+  .smooth-scroll-x {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Timeline animations */

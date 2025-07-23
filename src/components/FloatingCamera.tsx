@@ -1,7 +1,8 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Float } from '@react-three/drei';
 import * as THREE from 'three';
+import { Lazy3D } from './LazyComponents';
 
 const CameraModel = () => {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -45,23 +46,31 @@ const CameraModel = () => {
 
 export const FloatingCamera = () => {
   return (
-    <div className="w-full h-full">
-      <Canvas camera={{ position: [3, 2, 3], fov: 45 }}>
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 5, 5]} intensity={1} color="#f4d03f" />
-        <pointLight position={[-5, 5, 5]} intensity={0.5} color="#85c1e9" />
-        
-        <CameraModel />
-        
-        <OrbitControls 
-          enableZoom={false} 
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={1}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 3}
-        />
-      </Canvas>
-    </div>
+    <Lazy3D height={400} offset={200}>
+      <div className="w-full h-full">
+        <Canvas
+          camera={{ position: [3, 2, 3], fov: 45 }}
+          dpr={[1, 2]}
+          performance={{ min: 0.5 }}
+        >
+          <Suspense fallback={null}>
+            <ambientLight intensity={0.3} />
+            <directionalLight position={[5, 5, 5]} intensity={1} color="#f4d03f" />
+            <pointLight position={[-5, 5, 5]} intensity={0.5} color="#85c1e9" />
+
+            <CameraModel />
+
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
+              autoRotate
+              autoRotateSpeed={1}
+              maxPolarAngle={Math.PI / 2}
+              minPolarAngle={Math.PI / 3}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
+    </Lazy3D>
   );
 };
