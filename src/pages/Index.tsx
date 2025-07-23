@@ -40,6 +40,7 @@ const Index = () => {
         <ServicesSection />
         <ToolsSection />
         <JourneySection />
+        <ContactSection />
         <ClientsTestimonialsSection />
       </ScrollContainer>
     </div>
