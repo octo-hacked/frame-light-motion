@@ -38,6 +38,7 @@ const Index = () => {
         <ProjectsSection />
         <ServicesSection />
         <ToolsSection />
+        <JourneySection />
         <ClientsTestimonialsSection />
       </ScrollContainer>
     </div>
