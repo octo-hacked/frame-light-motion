@@ -7,6 +7,7 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { ToolsSection } from "@/components/ToolsSection";
 import { JourneySection } from "@/components/JourneySection";
+import { ContactSection } from "@/components/ContactSection";
 import { ClientsTestimonialsSection } from "@/components/ClientsTestimonialsSection";
 import { ScrollContainer } from "@/components/ScrollContainer";
 
