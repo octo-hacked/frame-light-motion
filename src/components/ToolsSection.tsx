@@ -356,7 +356,7 @@ export const ToolsSection = () => {
 
         {/* Tools Grid - Now Always Visible */}
         <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 justify-items-center">
             {tools.map((tool, index) => (
               <ToolCard
                 key={tool.id}
