@@ -148,8 +148,8 @@ const FilmFrame = ({
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: frame,
-        start: "top 90%",
-        once: true, // KEY FIX: only trigger once
+        start: "top 95%",
+        once: true,
         onComplete: () => setHasAnimated(true)
       }
     });
