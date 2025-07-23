@@ -200,7 +200,7 @@ const BioContent = () => {
       {/* Achievements */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {achievements.map((achievement, index) => (
             <div
               key={index}
