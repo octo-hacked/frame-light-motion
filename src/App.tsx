@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { useAppLoading } from "@/hooks/useAppLoading";
+import { PerformanceIndicator } from "@/components/PerformanceMonitor";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
