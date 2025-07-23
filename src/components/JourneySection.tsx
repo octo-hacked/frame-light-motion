@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { 
-  Play, 
-  Award, 
-  Users, 
-  Zap, 
-  Camera, 
-  Film, 
+import {
+  Play,
+  Award,
+  Users,
+  Zap,
+  Camera,
+  Film,
   Star,
   Calendar,
   MapPin,
   TrendingUp,
   X
 } from 'lucide-react';
+import { LazyImage } from './LazyComponents';
 
 gsap.registerPlugin(ScrollTrigger);
 
