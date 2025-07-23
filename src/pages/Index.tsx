@@ -10,6 +10,7 @@ import { JourneySection } from "@/components/JourneySection";
 import { ContactSection } from "@/components/ContactSection";
 import { ClientsTestimonialsSection } from "@/components/ClientsTestimonialsSection";
 import { ScrollContainer } from "@/components/ScrollContainer";
+import { useScrollManager } from "@/hooks/useScrollManager";
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
