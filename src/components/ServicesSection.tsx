@@ -242,7 +242,7 @@ const ServiceCard = ({
     >
       {/* Main Card */}
       <div 
-        className="relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-500"
+        className="relative overflow-hidden rounded-lg md:rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-500"
         style={{
           background: isHovered 
             ? `linear-gradient(135deg, ${service.gradient[0]}15, ${service.gradient[1]}10, ${service.gradient[2]}05)`
@@ -254,7 +254,7 @@ const ServiceCard = ({
         }}
       >
         {/* Image Section */}
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-32 md:h-48 overflow-hidden">
           <div 
             ref={imageRef}
             className="absolute inset-0 transition-transform duration-700"
@@ -273,7 +273,7 @@ const ServiceCard = ({
           
           {/* Price Tag */}
           <div 
-            className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
+            className="absolute top-2 md:top-4 right-2 md:right-4 px-2 md:px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
             style={{ 
               background: `${service.accentColor}20`,
               color: service.accentColor,
@@ -285,29 +285,29 @@ const ServiceCard = ({
 
           {/* Icon */}
           <div 
-            className="absolute top-4 left-4 p-3 rounded-full backdrop-blur-sm"
+            className="absolute top-2 md:top-4 left-2 md:left-4 p-2 md:p-3 rounded-full backdrop-blur-sm"
             style={{ 
               background: `${service.accentColor}20`,
               border: `1px solid ${service.accentColor}40`
             }}
           >
             <IconComponent 
-              className="w-6 h-6" 
+              className="w-4 md:w-6 h-4 md:h-6" 
               style={{ color: service.accentColor }}
             />
           </div>
         </div>
 
         {/* Content Section */}
-        <div ref={contentRef} className="p-6">
+        <div ref={contentRef} className="p-3 md:p-6">
           {/* Title & Description */}
           <div className="mb-4">
-            <h3 className="text-xl font-bold text-white mb-2">{service.title}</h3>
-            <p className="text-white/70 text-sm leading-relaxed">{service.shortDesc}</p>
+            <h3 className="text-sm md:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">{service.title}</h3>
+            <p className="text-white/70 text-xs md:text-sm leading-relaxed hidden md:block">{service.shortDesc}</p>
           </div>
 
           {/* Features Preview */}
-          <div className="mb-4">
+          <div className="mb-2 md:mb-4 hidden md:block">
             <div className="space-y-1">
               {service.features.slice(0, 3).map((feature: string, idx: number) => (
                 <div key={idx} className="flex items-center space-x-2">
@@ -325,13 +325,13 @@ const ServiceCard = ({
           </div>
 
           {/* Timeline */}
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center space-x-1">
-              <Clock className="w-3 h-3 text-white/50" />
-              <span className="text-white/50">{service.timeline}</span>
+          <div className="flex items-center justify-center md:justify-between text-xs">
+            <div className="flex items-center space-x-1 md:block">
+              <Clock className="w-3 h-3 text-white/50 hidden md:inline" />
+              <span className="text-white/50 text-xs">{service.timeline}</span>
             </div>
-            <div 
-              className="flex items-center space-x-1 text-xs font-medium"
+            <div
+              className="hidden md:flex items-center space-x-1 text-xs font-medium"
               style={{ color: service.accentColor }}
             >
               <span>Learn More</span>
