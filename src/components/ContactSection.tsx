@@ -13,57 +13,84 @@ import {
   Headphones,
   X,
   Check,
-  Sparkles
+  Sparkles,
+  Laptop,
+  Pen
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Studio objects data
+// Enhanced studio objects with better positioning and colors
 const studioObjects = [
   {
     id: 'camera',
     name: 'Camera',
     icon: Camera,
-    position: { x: '15%', y: '25%', z: 20 },
+    position: { x: '15%', y: '20%', z: 25 },
     action: 'Take a shot!',
     sound: 'camera-shutter',
-    color: '#FF6B6B'
+    color: '#FF6B6B',
+    size: 'large'
+  },
+  {
+    id: 'laptop',
+    name: 'Laptop',
+    icon: Laptop,
+    position: { x: '45%', y: '30%', z: 30 },
+    action: 'View my work!',
+    sound: 'screen-on',
+    color: '#333333',
+    size: 'xlarge'
   },
   {
     id: 'coffee',
     name: 'Coffee',
     icon: Coffee,
-    position: { x: '75%', y: '40%', z: 15 },
+    position: { x: '75%', y: '35%', z: 20 },
     action: 'Fuel for creativity!',
     sound: 'coffee-sip',
-    color: '#8B4513'
+    color: '#8B4513',
+    size: 'medium'
   },
   {
     id: 'phone',
     name: 'Phone',
     icon: Phone,
-    position: { x: '60%', y: '20%', z: 10 },
+    position: { x: '65%', y: '15%', z: 15 },
     action: 'Let\'s talk!',
     sound: 'phone-ring',
-    color: '#4ECDC4'
+    color: '#4ECDC4',
+    size: 'medium'
   },
   {
     id: 'email',
     name: 'Email',
     icon: Mail,
-    position: { x: '25%', y: '60%', z: 25 },
+    position: { x: '25%', y: '55%', z: 22 },
     action: 'Open contact form',
     sound: 'email-send',
-    color: '#FFD93D'
+    color: '#FFD93D',
+    size: 'large'
   },
   {
-    id: 'monitor',
-    name: 'Monitor',
-    icon: Monitor,
-    position: { x: '45%', y: '35%', z: 30 },
-    action: 'View my work!',
-    sound: 'screen-on',
-    color: '#9999FF'
+    id: 'headphones',
+    name: 'Headphones',
+    icon: Headphones,
+    position: { x: '85%', y: '60%', z: 18 },
+    action: 'Listen to my work!',
+    sound: 'audio-play',
+    color: '#9999FF',
+    size: 'medium'
+  },
+  {
+    id: 'pen',
+    name: 'Pen',
+    icon: Pen,
+    position: { x: '35%', y: '75%', z: 12 },
+    action: 'Sign the contract!',
+    sound: 'pen-write',
+    color: '#FF9F43',
+    size: 'small'
   }
 ];
 
@@ -95,75 +122,76 @@ const useTypewriter = (text: string, speed: number = 100) => {
   return { displayText, isTyping };
 };
 
-// Sound Effect Hook
+// Enhanced Sound Effect Hook
 const useSoundEffect = () => {
   const playSound = (type: string) => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    
-    const sounds: Record<string, () => void> = {
-      'camera-shutter': () => {
-        // Camera shutter sound
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-      },
-      'coffee-sip': () => {
-        // Coffee sip sound
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
-        
-        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.2);
-      },
-      'phone-ring': () => {
-        // Phone ring sound
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(520, audioContext.currentTime + 0.1);
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.2);
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-      }
-    };
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      const sounds: Record<string, () => void> = {
+        'camera-shutter': () => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.1);
+        },
+        'coffee-sip': () => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.2);
+        },
+        'phone-ring': () => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(520, audioContext.currentTime + 0.1);
+          oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.2);
+          
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.3);
+        }
+      };
 
-    if (sounds[type]) {
-      sounds[type]();
+      if (sounds[type]) {
+        sounds[type]();
+      }
+    } catch (error) {
+      console.log('Audio not available');
     }
   };
 
   return { playSound };
 };
 
-// Interactive Studio Object
+// Enhanced Interactive Studio Object
 const StudioObject = ({ 
   object, 
   onInteract, 
@@ -178,6 +206,14 @@ const StudioObject = ({
   const { playSound } = useSoundEffect();
   const IconComponent = object.icon;
 
+  // Size mapping
+  const sizeClasses = {
+    small: 'w-6 h-6 p-3',
+    medium: 'w-8 h-8 p-4',
+    large: 'w-10 h-10 p-5',
+    xlarge: 'w-12 h-12 p-6'
+  };
+
   useEffect(() => {
     const element = objectRef.current;
     if (!element) return;
@@ -186,8 +222,8 @@ const StudioObject = ({
     gsap.fromTo(element,
       { 
         opacity: 0, 
-        scale: 0.5,
-        y: 50,
+        scale: 0.3,
+        y: -50,
         rotationY: -180
       },
       {
@@ -195,25 +231,26 @@ const StudioObject = ({
         scale: 1,
         y: 0,
         rotationY: 0,
-        duration: 1,
-        delay: index * 0.2,
+        duration: 1.2,
+        delay: index * 0.15,
         ease: "back.out(1.7)",
         scrollTrigger: {
           trigger: element,
-          start: "top 90%",
+          start: "top 95%",
           once: true
         }
       }
     );
 
-    // Floating animation
+    // Continuous floating animation
     gsap.to(element, {
-      y: "+=10",
-      duration: 2 + Math.random() * 2,
+      y: "+=8",
+      rotation: "+=2",
+      duration: 3 + Math.random() * 2,
       repeat: -1,
       yoyo: true,
       ease: "power2.inOut",
-      delay: Math.random() * 2
+      delay: Math.random() * 3
     });
   }, [index]);
 
@@ -222,16 +259,46 @@ const StudioObject = ({
       playSound(object.sound);
     }
     
-    // Click animation
-    gsap.to(objectRef.current, {
-      scale: 0.9,
+    // Enhanced click animation with flash effect
+    const tl = gsap.timeline();
+    tl.to(objectRef.current, {
+      scale: 0.8,
       duration: 0.1,
-      yoyo: true,
-      repeat: 1,
       ease: "power2.inOut"
+    })
+    .to(objectRef.current, {
+      scale: 1.2,
+      duration: 0.2,
+      ease: "back.out(1.7)"
+    })
+    .to(objectRef.current, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out"
     });
 
-    // Vibration effect for phone
+    // Flash effect
+    const flash = document.createElement('div');
+    flash.className = 'absolute inset-0 bg-white rounded-xl pointer-events-none';
+    flash.style.zIndex = '1000';
+    objectRef.current?.appendChild(flash);
+    
+    gsap.fromTo(flash, 
+      { opacity: 0 },
+      { 
+        opacity: 0.8, 
+        duration: 0.1,
+        onComplete: () => {
+          gsap.to(flash, {
+            opacity: 0,
+            duration: 0.2,
+            onComplete: () => flash.remove()
+          });
+        }
+      }
+    );
+
+    // Vibration for phone
     if (object.id === 'phone' && 'vibrate' in navigator) {
       navigator.vibrate([100, 50, 100]);
     }
@@ -252,63 +319,84 @@ const StudioObject = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
     >
-      {/* Object Shadow */}
+      {/* Enhanced shadow with depth */}
       <div 
-        className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-3 bg-black/30 rounded-full blur-sm"
-        style={{ transform: `translateX(-50%) scale(${isHovered ? 1.2 : 1})` }}
+        className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-black/40 rounded-full blur-md transition-all duration-300"
+        style={{ 
+          width: isHovered ? '3rem' : '2rem',
+          height: isHovered ? '0.8rem' : '0.5rem'
+        }}
       />
       
-      {/* Object */}
+      {/* Object with enhanced styling */}
       <div 
-        className="relative p-4 rounded-xl backdrop-blur-sm border transition-all duration-300"
+        className={`relative rounded-xl backdrop-blur-sm border-2 transition-all duration-300 ${sizeClasses[object.size]} flex items-center justify-center`}
         style={{
-          background: `${object.color}20`,
-          borderColor: isHovered ? object.color : `${object.color}40`,
-          boxShadow: isHovered ? `0 0 30px ${object.color}50` : `0 0 10px ${object.color}20`,
-          transform: isHovered ? 'scale(1.1) rotateY(10deg)' : 'scale(1) rotateY(0deg)'
+          background: isHovered 
+            ? `linear-gradient(135deg, ${object.color}40, ${object.color}20)` 
+            : `linear-gradient(135deg, ${object.color}30, ${object.color}15)`,
+          borderColor: isHovered ? object.color : `${object.color}60`,
+          boxShadow: isHovered 
+            ? `0 0 40px ${object.color}60, 0 10px 30px rgba(0,0,0,0.4)` 
+            : `0 0 20px ${object.color}30, 0 5px 15px rgba(0,0,0,0.3)`,
+          transform: isHovered ? 'scale(1.1) rotateY(15deg)' : 'scale(1) rotateY(0deg)'
         }}
       >
         <IconComponent 
-          className="w-8 h-8 transition-colors" 
-          style={{ color: object.color }} 
+          className={`transition-all duration-300 ${object.size === 'xlarge' ? 'w-8 h-8' : object.size === 'large' ? 'w-6 h-6' : 'w-5 h-5'}`}
+          style={{ color: isHovered ? '#ffffff' : object.color }} 
         />
         
         {/* Tooltip */}
         {isHovered && (
           <div 
-            className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-black/80 text-white text-sm rounded-lg whitespace-nowrap"
+            className="absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-black/90 text-white text-sm rounded-lg whitespace-nowrap z-50 border"
             style={{ borderColor: object.color }}
           >
             {object.action}
             <div 
-              className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black/80 rotate-45"
+              className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black/90 rotate-45 border-b border-r"
+              style={{ borderColor: object.color }}
             />
           </div>
         )}
       </div>
       
-      {/* Floating particles */}
+      {/* Floating particles on hover */}
       {isHovered && (
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 rounded-full animate-ping"
               style={{
                 background: object.color,
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${i * 0.1}s`
+                top: `${20 + Math.random() * 60}%`,
+                left: `${20 + Math.random() * 60}%`,
+                animationDelay: `${i * 0.2}s`,
+                animationDuration: '1s'
               }}
             />
           ))}
         </div>
       )}
+
+      {/* Glowing ring on hover */}
+      {isHovered && (
+        <div 
+          className="absolute inset-0 rounded-xl pointer-events-none animate-pulse"
+          style={{
+            border: `2px solid ${object.color}`,
+            transform: 'scale(1.3)',
+            opacity: 0.6
+          }}
+        />
+      )}
     </div>
   );
 };
 
-// Contact Form Component
+// Contact Form Component (unchanged but optimized)
 const ContactForm = ({ 
   isOpen, 
   onClose, 
@@ -468,33 +556,34 @@ const ContactForm = ({
   );
 };
 
-// Confetti Animation
+// Enhanced Confetti Animation
 const ConfettiAnimation = ({ isActive }: { isActive: boolean }) => {
   const confettiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isActive && confettiRef.current) {
-      // Create confetti particles
       const colors = ['#FFD93D', '#FF6B6B', '#4ECDC4', '#9999FF', '#FF9F43'];
       const container = confettiRef.current;
       
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 60; i++) {
         const confetti = document.createElement('div');
-        confetti.className = 'absolute w-2 h-2 pointer-events-none';
+        confetti.className = 'absolute pointer-events-none';
         confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
         confetti.style.left = '50%';
         confetti.style.top = '50%';
+        confetti.style.width = Math.random() > 0.5 ? '8px' : '12px';
+        confetti.style.height = Math.random() > 0.5 ? '8px' : '12px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
         
         container.appendChild(confetti);
         
         gsap.to(confetti, {
-          x: (Math.random() - 0.5) * 800,
-          y: (Math.random() - 0.5) * 600,
-          rotation: Math.random() * 360,
-          scale: Math.random() * 2,
+          x: (Math.random() - 0.5) * 1000,
+          y: (Math.random() - 0.5) * 800,
+          rotation: Math.random() * 720,
+          scale: Math.random() * 3,
           opacity: 0,
-          duration: 2 + Math.random() * 2,
+          duration: 3 + Math.random() * 3,
           ease: "power2.out",
           onComplete: () => confetti.remove()
         });
@@ -523,16 +612,16 @@ export const ContactSection = () => {
     const desk = deskRef.current;
     if (!section || !desk) return;
 
-    // Parallax desk effect
+    // Enhanced parallax desk effect
     gsap.to(desk, {
-      rotationX: -5,
-      transformPerspective: 1000,
+      rotationX: -8,
+      transformPerspective: 1200,
       ease: "none",
       scrollTrigger: {
         trigger: section,
         start: "top bottom",
         end: "bottom top",
-        scrub: 1
+        scrub: 2
       }
     });
   }, []);
@@ -576,41 +665,62 @@ export const ContactSection = () => {
           </p>
         </div>
 
-        {/* 3D Studio Desk Scene */}
-        <div className="relative max-w-6xl mx-auto px-6 h-96">
+        {/* Enhanced 3D Studio Desk Scene */}
+        <div className="relative max-w-7xl mx-auto px-6 h-[500px] mb-16">
           <div 
             ref={deskRef}
-            className="relative w-full h-full bg-gradient-to-b from-amber-900/20 to-amber-800/30 rounded-xl border border-amber-600/30 shadow-2xl"
+            className="relative w-full h-full rounded-2xl overflow-hidden"
             style={{
-              background: 'linear-gradient(45deg, #8B4513 0%, #A0522D 50%, #8B4513 100%)',
-              transform: 'perspective(1000px) rotateX(-10deg)',
-              boxShadow: '0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
+              background: `
+                linear-gradient(135deg, 
+                  #8B4513 0%, 
+                  #A0522D 20%, 
+                  #CD853F 40%, 
+                  #A0522D 60%, 
+                  #8B4513 80%, 
+                  #654321 100%
+                )`,
+              transform: 'perspective(1200px) rotateX(-12deg)',
+              boxShadow: `
+                0 50px 100px rgba(0,0,0,0.6), 
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -1px 0 rgba(0,0,0,0.3)
+              `
             }}
           >
-            {/* Desk Surface Texture */}
+            {/* Enhanced Desk Surface with Wood Grain */}
             <div 
-              className="absolute inset-0 rounded-xl opacity-50"
+              className="absolute inset-0 rounded-2xl"
               style={{
                 background: `
                   repeating-linear-gradient(
                     90deg,
-                    transparent,
+                    rgba(0,0,0,0.1) 0px,
                     transparent 2px,
-                    rgba(0,0,0,0.1) 2px,
-                    rgba(0,0,0,0.1) 4px
+                    transparent 8px,
+                    rgba(0,0,0,0.05) 10px
                   ),
                   repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0,0,0,0.1) 2px,
-                    rgba(0,0,0,0.1) 4px
+                    45deg,
+                    rgba(255,255,255,0.02) 0px,
+                    transparent 1px,
+                    transparent 3px,
+                    rgba(255,255,255,0.01) 4px
                   )
-                `
+                `,
+                opacity: 0.8
               }}
             />
 
-            {/* Studio Objects */}
+            {/* Desk Edge Highlight */}
+            <div 
+              className="absolute inset-x-0 top-0 h-2 rounded-t-2xl"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%)'
+              }}
+            />
+
+            {/* Enhanced Studio Objects */}
             {studioObjects.map((object, index) => (
               <StudioObject
                 key={object.id}
@@ -620,46 +730,56 @@ export const ContactSection = () => {
               />
             ))}
 
-            {/* Ambient Lighting */}
-            <div className="absolute top-4 left-4 w-32 h-32 bg-cinema-gold/10 rounded-full blur-xl" />
-            <div className="absolute bottom-4 right-4 w-24 h-24 bg-cinema-orange/10 rounded-full blur-xl" />
+            {/* Enhanced Ambient Lighting */}
+            <div className="absolute top-8 left-8 w-40 h-40 bg-cinema-gold/15 rounded-full blur-xl animate-pulse" />
+            <div className="absolute bottom-8 right-8 w-32 h-32 bg-cinema-orange/15 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+            
+            {/* Desk Reflection */}
+            <div 
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.05) 100%)'
+              }}
+            />
           </div>
         </div>
 
         {/* Quick Contact Info */}
-        <div className="max-w-4xl mx-auto px-6 mt-16">
+        <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-white/5 rounded-xl border border-white/10">
-              <Mail className="w-8 h-8 text-cinema-gold mx-auto mb-4" />
-              <h4 className="text-white font-semibold mb-2">Email</h4>
+            <div className="text-center p-8 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+              <Mail className="w-10 h-10 text-cinema-gold mx-auto mb-4" />
+              <h4 className="text-white font-semibold mb-2 text-lg">Email</h4>
               <p className="text-white/70">hello@webarts.com</p>
             </div>
-            <div className="text-center p-6 bg-white/5 rounded-xl border border-white/10">
-              <Phone className="w-8 h-8 text-cinema-gold mx-auto mb-4" />
-              <h4 className="text-white font-semibold mb-2">Phone</h4>
+            <div className="text-center p-8 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+              <Phone className="w-10 h-10 text-cinema-gold mx-auto mb-4" />
+              <h4 className="text-white font-semibold mb-2 text-lg">Phone</h4>
               <p className="text-white/70">+1 (555) 123-4567</p>
             </div>
-            <div className="text-center p-6 bg-white/5 rounded-xl border border-white/10">
-              <Coffee className="w-8 h-8 text-cinema-gold mx-auto mb-4" />
-              <h4 className="text-white font-semibold mb-2">Coffee Chat</h4>
+            <div className="text-center p-8 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+              <Coffee className="w-10 h-10 text-cinema-gold mx-auto mb-4" />
+              <h4 className="text-white font-semibold mb-2 text-lg">Coffee Chat</h4>
               <p className="text-white/70">Always open for creative discussions</p>
             </div>
           </div>
         </div>
 
-        {/* Notification */}
+        {/* Enhanced Notification */}
         {notification && (
-          <div className="fixed top-8 right-8 z-40 bg-cinema-gold text-cinema-black px-6 py-3 rounded-lg font-semibold shadow-lg animate-bounce">
-            <div className="flex items-center space-x-2">
+          <div className="fixed top-8 right-8 z-40 bg-gradient-to-r from-cinema-gold to-cinema-orange text-cinema-black px-6 py-4 rounded-xl font-semibold shadow-2xl animate-bounce border border-cinema-gold/50">
+            <div className="flex items-center space-x-3">
               <Check className="w-5 h-5" />
               <span>{notification}</span>
             </div>
           </div>
         )}
 
-        {/* Background Effects */}
+        {/* Enhanced Background Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cinema-gold/5 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cinema-orange/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
+        <div className="absolute top-1/2 left-1/6 w-48 h-48 bg-cinema-blue/5 rounded-full blur-2xl animate-float" style={{ animationDelay: '5s' }} />
       </section>
 
       {/* Contact Form Modal */}
@@ -669,7 +789,7 @@ export const ContactSection = () => {
         onSubmit={handleFormSubmit}
       />
 
-      {/* Confetti Animation */}
+      {/* Enhanced Confetti Animation */}
       <ConfettiAnimation isActive={showConfetti} />
     </>
   );
