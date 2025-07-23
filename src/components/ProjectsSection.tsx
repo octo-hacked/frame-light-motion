@@ -531,8 +531,8 @@ const ProjectCard = ({ project, onClick }: { project: any; onClick: () => void }
         ease: "power3.out",
         scrollTrigger: {
           trigger: card,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
+          start: "top 95%",
+          toggleActions: "play none none none"
         }
       }
     );
@@ -599,8 +599,8 @@ export const ProjectsSection = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: section,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
+          start: "top 95%",
+          toggleActions: "play none none none"
         }
       }
     );
