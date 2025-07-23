@@ -85,12 +85,12 @@ const VideoSnippet = ({ src, delay = 0 }: { src: string; delay?: number }) => {
   const content = getContent();
 
   return (
-    <div ref={containerRef} className="relative h-24 rounded-lg overflow-hidden shadow-film bg-cinema-black/20 hover:bg-cinema-black/40 transition-all duration-300">
+    <div ref={containerRef} className="relative h-20 rounded-lg overflow-hidden shadow-film bg-cinema-black/20 hover:bg-cinema-black/40 transition-all duration-300 min-w-0 flex-shrink-0">
       {/* Simulated video content with gradient */}
       <div className="w-full h-full bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/10 flex items-center justify-center">
-        <div className="text-cinema-white/70 text-xs text-center px-2">
-          <div className="text-lg mb-1">{content.icon}</div>
-          <div className="font-light">{content.text}</div>
+        <div className="text-cinema-white/70 text-xs text-center px-1">
+          <div className="text-sm mb-0.5">{content.icon}</div>
+          <div className="font-light text-xs leading-tight">{content.text}</div>
         </div>
       </div>
       
@@ -178,13 +178,13 @@ const BioContent = () => {
         <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
 
         {/* Mobile: 2 cards per row */}
-        <div className="md:hidden grid grid-cols-2 gap-2">
+        <div className="md:hidden grid grid-cols-2 gap-1.5 max-w-full">
           {skills.map((skill, index) => (
-            <div key={index} className="group bg-cinema-white/5 rounded-lg p-2 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300">
-              <div className="text-center mb-2">
-                <div className="text-xl mb-1">{skill.icon}</div>
-                <div className="text-cinema-white/90 text-xs font-medium mb-1 leading-tight">{skill.name}</div>
-                <div className="text-cinema-gold font-bold text-sm">{skill.level}%</div>
+            <div key={index} className="group bg-cinema-white/5 rounded-lg p-1.5 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 min-w-0 flex-shrink-0">
+              <div className="text-center mb-1.5">
+                <div className="text-lg mb-0.5">{skill.icon}</div>
+                <div className="text-cinema-white/90 text-xs font-medium mb-0.5 leading-tight truncate px-0.5">{skill.name}</div>
+                <div className="text-cinema-gold font-bold text-xs">{skill.level}%</div>
               </div>
               <div className="w-full bg-cinema-white/10 rounded-full h-1.5">
                 <div
@@ -221,13 +221,13 @@ const BioContent = () => {
       {/* Achievements */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
-        <div className="grid grid-cols-2 gap-2 md:gap-4">
+        <div className="grid grid-cols-2 gap-1.5 md:gap-4 max-w-full">
           {achievements.map((achievement, index) => (
             <div
               key={index}
-              className="bg-cinema-white/5 rounded-lg p-2 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group min-h-[60px] flex items-center justify-center"
+              className="bg-cinema-white/5 rounded-lg p-1.5 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group min-h-[50px] flex items-center justify-center min-w-0 flex-shrink-0"
             >
-              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight">
+              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight px-0.5">
                 {achievement}
               </div>
             </div>
@@ -368,7 +368,7 @@ export const AboutSection = () => {
           <h3 className="text-cinema-gold text-lg font-light mb-4 text-center">
             Silent Work Sessions
           </h3>
-          <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="grid grid-cols-2 gap-1.5 mb-3 max-w-full">
             <VideoSnippet src="timeline" delay={0} />
             <VideoSnippet src="color" delay={0.2} />
             <VideoSnippet src="effects" delay={0.4} />
