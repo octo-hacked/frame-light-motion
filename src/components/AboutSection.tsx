@@ -142,57 +142,84 @@ const AnimatedWord = ({ word, index }: { word: string; index: number }) => {
   );
 };
 
-const BioTimeline = () => {
-  const timelineItems = [
-    {
-      year: "2018",
-      title: "The Beginning",
-      description: "Started my journey into video editing with a passion for storytelling and visual narrative."
-    },
-    {
-      year: "2020",
-      title: "Professional Growth",
-      description: "Expanded into commercial work, collaborating with brands and creators to bring their visions to life."
-    },
-    {
-      year: "2022",
-      title: "Cinematic Focus",
-      description: "Specialized in cinematic editing techniques, mastering color grading and advanced post-production workflows."
-    },
-    {
-      year: "2024",
-      title: "Today",
-      description: "Continuing to push creative boundaries while delivering exceptional results for every project."
-    }
-  ];
-
+const BioContent = () => {
   const bioText = "I'm a passionate video editor who believes every frame tells a story. With years of experience crafting compelling narratives, I specialize in transforming raw footage into cinematic masterpieces that captivate audiences and bring visions to life.".split(' ');
 
+  const skills = [
+    { name: "Video Editing", level: 95, icon: "🎬" },
+    { name: "Color Grading", level: 90, icon: "🎨" },
+    { name: "Motion Graphics", level: 85, icon: "✨" },
+    { name: "Audio Post", level: 88, icon: "🎵" },
+    { name: "3D Animation", level: 80, icon: "🎯" },
+    { name: "Storytelling", level: 92, icon: "📖" }
+  ];
+
+  const achievements = [
+    "300+ Projects Completed",
+    "50+ Happy Clients",
+    "8+ Years Experience",
+    "Award-Winning Work"
+  ];
+
   return (
-    <div className="space-y-12">
-      {/* Bio Paragraph with word-by-word animation */}
-      <div className="mb-16">
-        <h3 className="text-2xl font-light text-cinema-gold mb-6">About Me</h3>
-        <p className="text-lg text-cinema-white/80 leading-relaxed">
+    <div className="space-y-8">
+      {/* Bio Paragraph */}
+      <div className="mb-8">
+        <h3 className="text-3xl font-light text-cinema-gold mb-6">About Me</h3>
+        <p className="text-lg text-cinema-white/80 leading-relaxed mb-8">
           {bioText.map((word, index) => (
             <AnimatedWord key={index} word={word} index={index} />
           ))}
         </p>
       </div>
 
-      {/* Timeline */}
-      <div className="space-y-8">
-        <h3 className="text-2xl font-light text-cinema-gold mb-8">My Journey</h3>
-        {timelineItems.map((item, index) => (
-          <div key={index} className="relative pl-8 border-l border-cinema-gold/30">
-            <div className="absolute -left-2 w-4 h-4 bg-cinema-gold rounded-full" />
-            <div className="timeline-item">
-              <div className="text-cinema-gold font-semibold text-sm mb-1">{item.year}</div>
-              <h4 className="text-cinema-white font-medium text-lg mb-2">{item.title}</h4>
-              <p className="text-cinema-white/70 text-sm leading-relaxed">{item.description}</p>
+      {/* Skills Section */}
+      <div className="mb-8">
+        <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
+        <div className="space-y-4">
+          {skills.map((skill, index) => (
+            <div key={index} className="group">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">{skill.icon}</span>
+                  <span className="text-cinema-white/90 font-medium">{skill.name}</span>
+                </div>
+                <span className="text-cinema-gold font-bold">{skill.level}%</span>
+              </div>
+              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      {/* Achievements */}
+      <div className="mb-8">
+        <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
+        <div className="grid grid-cols-2 gap-4">
+          {achievements.map((achievement, index) => (
+            <div
+              key={index}
+              className="bg-cinema-white/5 rounded-lg p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
+            >
+              <div className="text-cinema-white/80 text-sm text-center group-hover:text-cinema-gold transition-colors">
+                {achievement}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Philosophy */}
+      <div className="bg-gradient-to-r from-cinema-gold/10 to-cinema-orange/10 rounded-lg p-6 border border-cinema-gold/20">
+        <h4 className="text-lg font-semibold text-cinema-gold mb-3">My Philosophy</h4>
+        <p className="text-cinema-white/80 text-sm leading-relaxed italic">
+          "Every project is a chance to tell a unique story. I don't just edit videos—I craft experiences that resonate with audiences and bring creative visions to life through the power of cinematic storytelling."
+        </p>
       </div>
     </div>
   );
