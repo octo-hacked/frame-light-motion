@@ -206,12 +206,20 @@ const StudioObject = ({
   const { playSound } = useSoundEffect();
   const IconComponent = object.icon;
 
-  // Size mapping
-  const sizeClasses = {
-    small: 'w-6 h-6 p-3',
-    medium: 'w-8 h-8 p-4',
-    large: 'w-10 h-10 p-5',
-    xlarge: 'w-12 h-12 p-6'
+  // Size mapping for containers
+  const containerSizes = {
+    small: 'p-3',
+    medium: 'p-4',
+    large: 'p-5',
+    xlarge: 'p-6'
+  };
+
+  // Size mapping for icons
+  const iconSizes = {
+    small: 'w-4 h-4',
+    medium: 'w-5 h-5',
+    large: 'w-6 h-6',
+    xlarge: 'w-8 h-8'
   };
 
   useEffect(() => {
