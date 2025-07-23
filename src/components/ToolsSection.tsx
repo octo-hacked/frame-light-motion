@@ -160,7 +160,7 @@ const ToolCard = ({
   return (
     <div
       ref={cardRef}
-      className="relative w-72 h-80 cursor-pointer bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-6 transition-all duration-300"
+      className="relative w-full max-w-72 h-64 md:h-80 cursor-pointer bg-white/5 backdrop-blur-md border border-white/20 rounded-lg md:rounded-xl p-3 md:p-6 transition-all duration-300"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onClick={onClick}
@@ -178,25 +178,25 @@ const ToolCard = ({
       </div>
 
       {/* Tool Icon */}
-      <div className="flex items-center justify-center mb-6">
-        <div 
-          className="w-16 h-16 rounded-full flex items-center justify-center"
+      <div className="flex items-center justify-center mb-3 md:mb-6">
+        <div
+          className="w-12 md:w-16 h-12 md:h-16 rounded-full flex items-center justify-center"
           style={{ 
             background: `linear-gradient(135deg, ${tool.color}, ${tool.gradient[1]})`,
             boxShadow: `0 8px 32px ${tool.color}40`
           }}
         >
-          <IconComponent className="w-8 h-8 text-white" />
+          <IconComponent className="w-6 md:w-8 h-6 md:h-8 text-white" />
         </div>
       </div>
 
       {/* Tool Info */}
       <div className="text-center">
-        <h3 className="text-lg font-bold text-white mb-2">{tool.name}</h3>
-        <p className="text-white/70 text-sm mb-4">{tool.category}</p>
+        <h3 className="text-sm md:text-lg font-bold text-white mb-1 md:mb-2 leading-tight">{tool.name}</h3>
+        <p className="text-white/70 text-xs md:text-sm mb-2 md:mb-4">{tool.category}</p>
         
         {/* Skill Level */}
-        <div className="mb-4">
+        <div className="mb-2 md:mb-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-white/80 text-sm">Skill Level</span>
             <span className="text-white font-bold text-sm">{tool.skillLevel}%</span>
@@ -214,12 +214,12 @@ const ToolCard = ({
 
         {/* Experience */}
         <div className="text-center">
-          <div className="text-white/60 text-sm">Experience</div>
-          <div className="text-white font-semibold">{tool.experience}</div>
+          <div className="text-white/60 text-xs md:text-sm">Experience</div>
+          <div className="text-white font-semibold text-xs md:text-base">{tool.experience}</div>
         </div>
 
         {/* Click hint */}
-        <div className="mt-4 text-white/50 text-xs">
+        <div className="mt-2 md:mt-4 text-white/50 text-xs hidden md:block">
           Click to see details
         </div>
       </div>
