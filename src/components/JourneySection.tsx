@@ -252,10 +252,11 @@ const FilmFrame = ({
         <div ref={contentRef} className="p-6">
           {/* Image */}
           <div className="relative mb-4 rounded-lg overflow-hidden">
-            <img 
+            <LazyImage
               src={milestone.image}
               alt={milestone.title}
               className="w-full h-28 object-cover"
+              height={112}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>
