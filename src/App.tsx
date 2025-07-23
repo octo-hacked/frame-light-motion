@@ -35,6 +35,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AppContent />
+      <PerformanceIndicator />
     </TooltipProvider>
   </QueryClientProvider>
 );
