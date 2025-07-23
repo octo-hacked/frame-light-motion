@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const useScrollManager = () => {
   useEffect(() => {
-    // Refresh ScrollTrigger when the hook mounts
+    // Simple setup - just refresh ScrollTrigger when the hook mounts
     ScrollTrigger.refresh();
 
     return () => {
@@ -26,8 +26,21 @@ export const useScrollManager = () => {
     ScrollTrigger.refresh();
   };
 
+  const scrollTo = (target: string | number, options?: any) => {
+    // Simple scroll to implementation
+    if (typeof target === 'string') {
+      const element = document.querySelector(target);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    }
+  };
+
   return {
     createScrollTrigger,
     refreshScrollTrigger,
+    scrollTo,
   };
 };

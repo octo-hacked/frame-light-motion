@@ -452,39 +452,76 @@ export const ShowreelSection = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6">
         
-        {/* Category Selector */}
-        <div className="flex justify-center mb-12">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {videoCategories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                  activeCategory === category.id
-                    ? 'bg-cinema-gold text-cinema-black shadow-cinematic'
-                    : 'bg-cinema-white/10 text-cinema-white hover:bg-cinema-white/20'
-                }`}
-                style={{
-                  boxShadow: activeCategory === category.id 
-                    ? `0 0 20px ${category.color}40` 
-                    : 'none'
-                }}
-              >
-                {category.name}
-              </button>
-            ))}
+        {/* Category Selector - Mobile Optimized */}
+        <div className="flex justify-center mb-8 md:mb-12">
+          <div className="w-full max-w-lg md:max-w-none">
+            {/* Mobile: Horizontal scroll */}
+            <div className="md:hidden overflow-x-auto scrollbar-hide smooth-scroll-x">
+              <div className="flex gap-3 px-6 pb-2" style={{ minWidth: 'max-content' }}>
+                {videoCategories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.id)}
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-300 whitespace-nowrap text-sm ${
+                      activeCategory === category.id
+                        ? 'bg-cinema-gold text-cinema-black shadow-cinematic'
+                        : 'bg-cinema-white/10 text-cinema-white hover:bg-cinema-white/20'
+                    }`}
+                    style={{
+                      boxShadow: activeCategory === category.id
+                        ? `0 0 20px ${category.color}40`
+                        : 'none'
+                    }}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: Flex wrap */}
+            <div className="hidden md:flex flex-wrap items-center justify-center gap-4">
+              {videoCategories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => handleCategoryChange(category.id)}
+                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                    activeCategory === category.id
+                      ? 'bg-cinema-gold text-cinema-black shadow-cinematic'
+                      : 'bg-cinema-white/10 text-cinema-white hover:bg-cinema-white/20'
+                  }`}
+                  style={{
+                    boxShadow: activeCategory === category.id
+                      ? `0 0 20px ${category.color}40`
+                      : 'none'
+                  }}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* 2D Camera Visualization */}
-        <div className="h-80 mb-12 rounded-lg overflow-hidden relative flex items-center bg-gradient-to-r from-cinema-black via-gray-900 to-cinema-black">
-                    <div className="flex items-center h-full max-w-5xl mx-auto px-8 gap-6">
-            {/* Camera section - takes most space */}
+        {/* 2D Camera Visualization - Mobile Responsive */}
+        <div className="h-60 md:h-80 mb-8 md:mb-12 rounded-lg overflow-hidden relative bg-gradient-to-r from-cinema-black via-gray-900 to-cinema-black">
+          {/* Mobile Layout: Stacked */}
+          <div className="md:hidden h-full px-4">
+            <div className="flex flex-col items-center justify-center h-full space-y-4">
+              <div className="scale-75">
+                <VintageCamera activeCategory={activeCategory} />
+              </div>
+              <div className="scale-90">
+                <SpeechBubble activeCategory={activeCategory} />
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout: Side by side */}
+          <div className="hidden md:flex items-center h-full max-w-5xl mx-auto px-8 gap-6">
             <div className="flex-1 h-full flex items-center justify-center">
               <VintageCamera activeCategory={activeCategory} />
             </div>
-            
-                        {/* Speech Bubble - balanced positioning */}
             <div className="w-64 flex items-center justify-center h-full pr-4">
               <SpeechBubble activeCategory={activeCategory} />
             </div>
@@ -528,18 +565,20 @@ export const ShowreelSection = () => {
                 onHover={setHoveredTime}
               />
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <button 
+              <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+                <div className="flex items-center space-x-2 sm:space-x-4">
+                  <button
                     onClick={handlePrevious}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label="Previous video"
                   >
                     <SkipBack className="w-5 h-5" />
                   </button>
-                  
+
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="p-3 bg-cinema-gold text-cinema-black rounded-full hover:bg-cinema-gold/80 transition-colors"
+                    className="p-3 bg-cinema-gold text-cinema-black rounded-full hover:bg-cinema-gold/80 transition-colors touch-manipulation"
+                    aria-label={isPlaying ? "Pause" : "Play"}
                   >
                     {isPlaying ? (
                       <Pause className="w-5 h-5" />
@@ -547,17 +586,19 @@ export const ShowreelSection = () => {
                       <Play className="w-5 h-5 ml-0.5" />
                     )}
                   </button>
-                  
-                  <button 
+
+                  <button
                     onClick={handleNext}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label="Next video"
                   >
                     <SkipForward className="w-5 h-5" />
                   </button>
-                  
+
                   <button
                     onClick={() => setIsMuted(!isMuted)}
-                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors"
+                    className="p-2 text-cinema-white hover:text-cinema-gold transition-colors touch-manipulation"
+                    aria-label={isMuted ? "Unmute" : "Mute"}
                   >
                     {isMuted ? (
                       <VolumeX className="w-5 h-5" />
@@ -567,7 +608,7 @@ export const ShowreelSection = () => {
                   </button>
                 </div>
 
-                <div className="text-cinema-white/60 text-sm">
+                <div className="text-cinema-white/60 text-xs sm:text-sm text-center sm:text-right">
                   {hoveredTime ? `Preview: ${Math.floor(hoveredTime / 60)}:${Math.floor(hoveredTime % 60).toString().padStart(2, '0')}` : 'Professional editing showcase'}
                 </div>
               </div>
@@ -575,17 +616,36 @@ export const ShowreelSection = () => {
           </div>
         </div>
 
-        {/* Video Thumbnails Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {currentVideos.map((video, index) => (
-            <VideoThumbnail
-              key={video.id}
-              video={video}
-              isActive={index === activeVideo}
-              onClick={() => handleVideoSelect(index)}
-              onHover={(hover) => {}}
-            />
-          ))}
+        {/* Video Thumbnails Grid - Mobile Optimized */}
+        <div className="max-w-6xl mx-auto">
+          {/* Mobile: Horizontal scroll */}
+          <div className="md:hidden overflow-x-auto scrollbar-hide smooth-scroll-x px-6">
+            <div className="flex gap-4 pb-4" style={{ minWidth: 'max-content' }}>
+              {currentVideos.map((video, index) => (
+                <div key={video.id} className="flex-shrink-0 w-48">
+                  <VideoThumbnail
+                    video={video}
+                    isActive={index === activeVideo}
+                    onClick={() => handleVideoSelect(index)}
+                    onHover={(hover) => {}}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Grid */}
+          <div className="hidden md:grid grid-cols-4 gap-6">
+            {currentVideos.map((video, index) => (
+              <VideoThumbnail
+                key={video.id}
+                video={video}
+                isActive={index === activeVideo}
+                onClick={() => handleVideoSelect(index)}
+                onHover={(hover) => {}}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

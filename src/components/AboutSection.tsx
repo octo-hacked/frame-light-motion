@@ -176,7 +176,28 @@ const BioContent = () => {
       {/* Skills Section */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
-        <div className="space-y-4">
+
+        {/* Mobile: 2 cards per row */}
+        <div className="md:hidden grid grid-cols-2 gap-3">
+          {skills.map((skill, index) => (
+            <div key={index} className="group bg-cinema-white/5 rounded-lg p-3 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300">
+              <div className="text-center mb-3">
+                <div className="text-2xl mb-2">{skill.icon}</div>
+                <div className="text-cinema-white/90 text-sm font-medium mb-1">{skill.name}</div>
+                <div className="text-cinema-gold font-bold text-lg">{skill.level}%</div>
+              </div>
+              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: Original layout */}
+        <div className="hidden md:block space-y-4">
           {skills.map((skill, index) => (
             <div key={index} className="group">
               <div className="flex items-center justify-between mb-2">
@@ -200,13 +221,13 @@ const BioContent = () => {
       {/* Achievements */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {achievements.map((achievement, index) => (
             <div
               key={index}
-              className="bg-cinema-white/5 rounded-lg p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
+              className="bg-cinema-white/5 rounded-lg p-3 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
             >
-              <div className="text-cinema-white/80 text-sm text-center group-hover:text-cinema-gold transition-colors">
+              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight">
                 {achievement}
               </div>
             </div>
@@ -284,13 +305,85 @@ export const AboutSection = () => {
   }, []);
 
   return (
-    <section 
+    <section
       ref={sectionRef}
       className="min-h-screen bg-cinema-black relative overflow-hidden"
     >
-      {/* Split Screen Layout */}
-      <div className="flex h-screen">
-        
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* Mobile Hero */}
+        <div className="h-screen px-6 py-12 flex flex-col">
+          <div
+            ref={portraitRef}
+            className="flex-1 relative cursor-pointer bg-gradient-to-br from-cinema-black via-cinema-black/90 to-cinema-gold/10 flex items-center justify-center rounded-lg mb-6"
+            onTouchStart={() => setIsPortraitHovered(true)}
+            onTouchEnd={() => setIsPortraitHovered(false)}
+          >
+            <div className="absolute inset-0">
+              <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+                <ambientLight intensity={0.4} />
+                <pointLight position={[10, 10, 10]} intensity={1.2} color="#D4AF37" />
+                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#FFA500" />
+                <PortraitMesh morphProgress={isPortraitHovered ? 1 : 0} />
+                <OrbitControls
+                  enableZoom={false}
+                  enablePan={false}
+                  autoRotate
+                  autoRotateSpeed={isPortraitHovered ? 2 : 0.5}
+                  maxPolarAngle={Math.PI / 1.5}
+                  minPolarAngle={Math.PI / 3}
+                />
+              </Canvas>
+            </div>
+
+            <div className="absolute top-4 left-4 z-10">
+              <h2 className="text-xl font-light text-cinema-white mb-1">
+                The Editor Behind
+              </h2>
+              <h2 className="text-xl font-bold bg-gradient-cinematic bg-clip-text text-transparent">
+                The Magic
+              </h2>
+            </div>
+
+            <div className="absolute bottom-4 right-4 text-cinema-white/60 text-xs">
+              Tap to interact
+            </div>
+          </div>
+
+          <div className="bg-cinema-white/5 rounded-lg p-4 border border-cinema-white/10">
+            <h3 className="text-lg font-light text-cinema-gold mb-2">About Me</h3>
+            <p className="text-cinema-white/80 text-sm leading-relaxed">
+              Passionate video editor specializing in cinematic storytelling.
+            </p>
+          </div>
+        </div>
+
+        {/* Mobile Content */}
+        <div className="px-6 py-8">
+          <BioContent />
+        </div>
+
+        {/* Mobile Video Snippets */}
+        <div className="px-6 py-8">
+          <h3 className="text-cinema-gold text-lg font-light mb-6 text-center">
+            Silent Work Sessions
+          </h3>
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <VideoSnippet src="timeline" delay={0} />
+            <VideoSnippet src="color" delay={0.2} />
+            <VideoSnippet src="effects" delay={0.4} />
+            <VideoSnippet src="audio" delay={0.6} />
+          </div>
+          <div className="text-center">
+            <p className="text-cinema-white/60 text-xs">
+              Live editing sessions • Silent workflow • Behind the scenes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-screen">
         {/* Left Panel - Bio Content */}
         <div
           ref={leftPanelRef}
@@ -303,7 +396,7 @@ export const AboutSection = () => {
         </div>
 
         {/* Right Panel - 3D Portrait & Video */}
-        <div 
+        <div
           ref={rightPanelRef}
           className="w-1/2 relative flex flex-col"
         >

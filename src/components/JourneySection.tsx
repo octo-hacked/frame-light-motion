@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { 
-  Play, 
-  Award, 
-  Users, 
-  Zap, 
-  Camera, 
-  Film, 
+import {
+  Play,
+  Award,
+  Users,
+  Zap,
+  Camera,
+  Film,
   Star,
   Calendar,
   MapPin,
   TrendingUp,
   X
 } from 'lucide-react';
+import { LazyImage } from './LazyComponents';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -148,8 +149,8 @@ const FilmFrame = ({
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: frame,
-        start: "top 90%",
-        once: true, // KEY FIX: only trigger once
+        start: "top 95%",
+        once: true,
         onComplete: () => setHasAnimated(true)
       }
     });
@@ -251,10 +252,11 @@ const FilmFrame = ({
         <div ref={contentRef} className="p-6">
           {/* Image */}
           <div className="relative mb-4 rounded-lg overflow-hidden">
-            <img 
+            <LazyImage
               src={milestone.image}
               alt={milestone.title}
               className="w-full h-28 object-cover"
+              height={112}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>

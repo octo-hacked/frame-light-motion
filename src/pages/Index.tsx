@@ -10,25 +10,31 @@ import { JourneySection } from "@/components/JourneySection";
 import { ContactSection } from "@/components/ContactSection";
 import { ClientsTestimonialsSection } from "@/components/ClientsTestimonialsSection";
 import { ScrollContainer } from "@/components/ScrollContainer";
+import { useScrollManager } from "@/hooks/useScrollManager";
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { refreshScrollTrigger } = useScrollManager();
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     // Entrance animation after loading
-    gsap.fromTo(container, 
+    gsap.fromTo(container,
       { opacity: 0 },
-      { 
-        opacity: 1, 
-        duration: 1.2, 
+      {
+        opacity: 1,
+        duration: 1.2,
         ease: "power2.out",
-        delay: 0.3
+        delay: 0.3,
+        onComplete: () => {
+          // Refresh scroll triggers after entrance animation
+          refreshScrollTrigger();
+        }
       }
     );
-  }, []);
+  }, [refreshScrollTrigger]);
 
   return (
     <div ref={containerRef} className="opacity-0">

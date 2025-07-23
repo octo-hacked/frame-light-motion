@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X, Play, Pause, Quote, Clock, User, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { SwipeCarousel, TapHoldReveal } from './MobileInteractions';
+import { LazyImage } from './LazyComponents';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -531,8 +533,8 @@ const ProjectCard = ({ project, onClick }: { project: any; onClick: () => void }
         ease: "power3.out",
         scrollTrigger: {
           trigger: card,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
+          start: "top 95%",
+          toggleActions: "play none none none"
         }
       }
     );
@@ -599,8 +601,8 @@ export const ProjectsSection = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: section,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
+          start: "top 95%",
+          toggleActions: "play none none none"
         }
       }
     );
@@ -635,14 +637,44 @@ export const ProjectsSection = () => {
           </p>
         </div>
 
-        {/* Projects Grid - Masonry Layout */}
+        {/* Mobile Carousel / Desktop Grid */}
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-max">
+          {/* Mobile: Swipe Carousel */}
+          <div className="md:hidden">
+            <SwipeCarousel autoPlay={true} autoPlayInterval={4000}>
+              {projects.map((project) => (
+                <div key={project.id} className="px-2">
+                  <TapHoldReveal
+                    revealContent={
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold text-cinema-gold mb-2">{project.title}</h3>
+                        <p className="text-white/80 mb-4">{project.description}</p>
+                        <button
+                          onClick={() => handleProjectClick(project)}
+                          className="bg-cinema-gold text-cinema-black px-6 py-2 rounded-lg font-semibold hover:bg-cinema-orange transition-colors"
+                        >
+                          View Project
+                        </button>
+                      </div>
+                    }
+                  >
+                    <ProjectCard
+                      project={project}
+                      onClick={() => handleProjectClick(project)}
+                    />
+                  </TapHoldReveal>
+                </div>
+              ))}
+            </SwipeCarousel>
+          </div>
+
+          {/* Desktop: Masonry Grid */}
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-max">
             {projects.map((project) => (
               <div
                 key={project.id}
                 className={`${
-                  project.id % 3 === 0 ? 'md:col-span-2 lg:col-span-1' : ''
+                  project.id % 3 === 0 ? 'lg:col-span-1' : ''
                 } ${
                   project.id % 4 === 0 ? 'lg:row-span-2' : ''
                 }`}
