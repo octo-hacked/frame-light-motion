@@ -337,22 +337,22 @@ const StudioObject = ({
       />
       
       {/* Object with enhanced styling */}
-      <div 
-        className={`relative rounded-xl backdrop-blur-sm border-2 transition-all duration-300 ${sizeClasses[object.size]} flex items-center justify-center`}
+      <div
+        className={`relative rounded-xl backdrop-blur-sm border-2 transition-all duration-300 ${containerSizes[object.size]} flex items-center justify-center`}
         style={{
-          background: isHovered 
-            ? `linear-gradient(135deg, ${object.color}40, ${object.color}20)` 
+          background: isHovered
+            ? `linear-gradient(135deg, ${object.color}40, ${object.color}20)`
             : `linear-gradient(135deg, ${object.color}30, ${object.color}15)`,
           borderColor: isHovered ? object.color : `${object.color}60`,
-          boxShadow: isHovered 
-            ? `0 0 40px ${object.color}60, 0 10px 30px rgba(0,0,0,0.4)` 
+          boxShadow: isHovered
+            ? `0 0 40px ${object.color}60, 0 10px 30px rgba(0,0,0,0.4)`
             : `0 0 20px ${object.color}30, 0 5px 15px rgba(0,0,0,0.3)`,
           transform: isHovered ? 'scale(1.1) rotateY(15deg)' : 'scale(1) rotateY(0deg)'
         }}
       >
-        <IconComponent 
-          className={`transition-all duration-300 ${object.size === 'xlarge' ? 'w-8 h-8' : object.size === 'large' ? 'w-6 h-6' : 'w-5 h-5'}`}
-          style={{ color: isHovered ? '#ffffff' : object.color }} 
+        <IconComponent
+          className={`transition-all duration-300 ${iconSizes[object.size]}`}
+          style={{ color: isHovered ? '#ffffff' : object.color }}
         />
         
         {/* Tooltip */}
