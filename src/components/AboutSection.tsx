@@ -75,7 +75,7 @@ const VideoSnippet = ({ src, delay = 0 }: { src: string; delay?: number }) => {
   const getContent = () => {
     switch(src) {
       case 'timeline': return { icon: '🎬', text: 'Timeline Editing' };
-      case 'color': return { icon: '🎨', text: 'Color Grading' };
+      case 'color': return { icon: '����', text: 'Color Grading' };
       case 'effects': return { icon: '✨', text: 'Visual Effects' };
       case 'audio': return { icon: '🎵', text: 'Audio Mixing' };
       default: return { icon: '📹', text: 'Video Work' };
@@ -291,14 +291,14 @@ export const AboutSection = () => {
       {/* Split Screen Layout */}
       <div className="flex h-screen">
         
-        {/* Left Panel - Bio Timeline */}
-        <div 
+        {/* Left Panel - Bio Content */}
+        <div
           ref={leftPanelRef}
           className="w-1/2 p-8 lg:p-12 overflow-y-auto scrollbar-hide"
           style={{ scrollSnapType: 'y mandatory' }}
         >
-          <div className="max-w-lg mx-auto pt-20">
-            <BioTimeline />
+          <div className="max-w-lg mx-auto pt-16">
+            <BioContent />
           </div>
         </div>
 
