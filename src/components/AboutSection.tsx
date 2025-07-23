@@ -165,7 +165,7 @@ const BioContent = () => {
     <div className="space-y-8">
       {/* Bio Paragraph */}
       <div className="mb-8">
-        <h3 className="text-3xl font-light text-cinema-gold mb-6">About Me</h3>
+        <h3 className="hidden md:block text-3xl font-light text-cinema-gold mb-6">About Me</h3>
         <p className="text-lg text-cinema-white/80 leading-relaxed mb-8">
           {bioText.map((word, index) => (
             <AnimatedWord key={index} word={word} index={index} />
