@@ -85,12 +85,12 @@ const VideoSnippet = ({ src, delay = 0 }: { src: string; delay?: number }) => {
   const content = getContent();
 
   return (
-    <div ref={containerRef} className="relative h-24 rounded-lg overflow-hidden shadow-film bg-cinema-black/20 hover:bg-cinema-black/40 transition-all duration-300">
+    <div ref={containerRef} className="relative h-20 rounded-lg overflow-hidden shadow-film bg-cinema-black/20 hover:bg-cinema-black/40 transition-all duration-300 min-w-0 flex-shrink-0">
       {/* Simulated video content with gradient */}
       <div className="w-full h-full bg-gradient-to-br from-cinema-gold/20 to-cinema-orange/10 flex items-center justify-center">
-        <div className="text-cinema-white/70 text-xs text-center px-2">
-          <div className="text-lg mb-1">{content.icon}</div>
-          <div className="font-light">{content.text}</div>
+        <div className="text-cinema-white/70 text-xs text-center px-1">
+          <div className="text-sm mb-0.5">{content.icon}</div>
+          <div className="font-light text-xs leading-tight">{content.text}</div>
         </div>
       </div>
       
@@ -165,7 +165,7 @@ const BioContent = () => {
     <div className="space-y-8">
       {/* Bio Paragraph */}
       <div className="mb-8">
-        <h3 className="text-3xl font-light text-cinema-gold mb-6">About Me</h3>
+        <h3 className="hidden md:block text-3xl font-light text-cinema-gold mb-6">About Me</h3>
         <p className="text-lg text-cinema-white/80 leading-relaxed mb-8">
           {bioText.map((word, index) => (
             <AnimatedWord key={index} word={word} index={index} />
@@ -178,17 +178,17 @@ const BioContent = () => {
         <h4 className="text-xl font-light text-cinema-gold mb-6">Core Skills</h4>
 
         {/* Mobile: 2 cards per row */}
-        <div className="md:hidden grid grid-cols-2 gap-3">
+        <div className="md:hidden grid grid-cols-2 gap-1.5 max-w-full">
           {skills.map((skill, index) => (
-            <div key={index} className="group bg-cinema-white/5 rounded-lg p-3 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300">
-              <div className="text-center mb-3">
-                <div className="text-2xl mb-2">{skill.icon}</div>
-                <div className="text-cinema-white/90 text-sm font-medium mb-1">{skill.name}</div>
-                <div className="text-cinema-gold font-bold text-lg">{skill.level}%</div>
+            <div key={index} className="group bg-cinema-white/5 rounded-lg p-1.5 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 min-w-0 flex-shrink-0">
+              <div className="text-center mb-1.5">
+                <div className="text-lg mb-0.5">{skill.icon}</div>
+                <div className="text-cinema-white/90 text-xs font-medium mb-0.5 leading-tight truncate px-0.5">{skill.name}</div>
+                <div className="text-cinema-gold font-bold text-xs">{skill.level}%</div>
               </div>
-              <div className="w-full bg-cinema-white/10 rounded-full h-2">
+              <div className="w-full bg-cinema-white/10 rounded-full h-1.5">
                 <div
-                  className="h-2 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
+                  className="h-1.5 rounded-full bg-gradient-to-r from-cinema-gold to-cinema-orange transition-all duration-1000 group-hover:from-cinema-orange group-hover:to-cinema-gold"
                   style={{ width: `${skill.level}%` }}
                 />
               </div>
@@ -221,13 +221,13 @@ const BioContent = () => {
       {/* Achievements */}
       <div className="mb-8">
         <h4 className="text-xl font-light text-cinema-gold mb-6">Achievements</h4>
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 gap-1.5 md:gap-4 max-w-full">
           {achievements.map((achievement, index) => (
             <div
               key={index}
-              className="bg-cinema-white/5 rounded-lg p-3 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group"
+              className="bg-cinema-white/5 rounded-lg p-1.5 md:p-4 border border-cinema-white/10 hover:border-cinema-gold/30 transition-all duration-300 group min-h-[50px] flex items-center justify-center min-w-0 flex-shrink-0"
             >
-              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight">
+              <div className="text-cinema-white/80 text-xs md:text-sm text-center group-hover:text-cinema-gold transition-colors leading-tight px-0.5">
                 {achievement}
               </div>
             </div>
@@ -236,9 +236,9 @@ const BioContent = () => {
       </div>
 
       {/* Philosophy */}
-      <div className="bg-gradient-to-r from-cinema-gold/10 to-cinema-orange/10 rounded-lg p-6 border border-cinema-gold/20">
-        <h4 className="text-lg font-semibold text-cinema-gold mb-3">My Philosophy</h4>
-        <p className="text-cinema-white/80 text-sm leading-relaxed italic">
+      <div className="bg-gradient-to-r from-cinema-gold/10 to-cinema-orange/10 rounded-lg p-4 md:p-6 border border-cinema-gold/20">
+        <h4 className="text-base md:text-lg font-semibold text-cinema-gold mb-2 md:mb-3">My Philosophy</h4>
+        <p className="text-cinema-white/80 text-xs md:text-sm leading-relaxed italic">
           "Every project is a chance to tell a unique story. I don't just edit videos—I craft experiences that resonate with audiences and bring creative visions to life through the power of cinematic storytelling."
         </p>
       </div>
@@ -312,7 +312,7 @@ export const AboutSection = () => {
       {/* Mobile Layout */}
       <div className="md:hidden">
         {/* Mobile Hero */}
-        <div className="h-screen px-6 py-12 flex flex-col">
+        <div className="h-screen px-4 py-8 flex flex-col">
           <div
             ref={portraitRef}
             className="flex-1 relative cursor-pointer bg-gradient-to-br from-cinema-black via-cinema-black/90 to-cinema-gold/10 flex items-center justify-center rounded-lg mb-6"
@@ -359,16 +359,16 @@ export const AboutSection = () => {
         </div>
 
         {/* Mobile Content */}
-        <div className="px-6 py-8">
+        <div className="px-4 py-6">
           <BioContent />
         </div>
 
         {/* Mobile Video Snippets */}
-        <div className="px-6 py-8">
-          <h3 className="text-cinema-gold text-lg font-light mb-6 text-center">
+        <div className="px-4 py-6">
+          <h3 className="text-cinema-gold text-lg font-light mb-4 text-center">
             Silent Work Sessions
           </h3>
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="grid grid-cols-2 gap-1.5 mb-3 max-w-full">
             <VideoSnippet src="timeline" delay={0} />
             <VideoSnippet src="color" delay={0.2} />
             <VideoSnippet src="effects" delay={0.4} />

@@ -10,6 +10,7 @@ import { JourneySection } from "@/components/JourneySection";
 import { ContactSection } from "@/components/ContactSection";
 import { ClientsTestimonialsSection } from "@/components/ClientsTestimonialsSection";
 import { ScrollContainer } from "@/components/ScrollContainer";
+import { Navigation } from "@/components/Navigation";
 import { useScrollManager } from "@/hooks/useScrollManager";
 
 const Index = () => {
@@ -38,16 +39,35 @@ const Index = () => {
 
   return (
     <div ref={containerRef} className="opacity-0">
+      <Navigation />
       <ScrollContainer className="min-h-screen">
-        <HeroSection />
-        <AboutSection />
-        <ShowreelSection />
-        <ProjectsSection />
-        <ServicesSection />
-        <ToolsSection />
-        <JourneySection />
-        <ContactSection />
-        <ClientsTestimonialsSection />
+        <div id="hero">
+          <HeroSection />
+        </div>
+        <div id="about">
+          <AboutSection />
+        </div>
+        <div id="showreel">
+          <ShowreelSection />
+        </div>
+        <div id="projects">
+          <ProjectsSection />
+        </div>
+        <div id="services">
+          <ServicesSection />
+        </div>
+        <div id="tools">
+          <ToolsSection />
+        </div>
+        <div id="journey">
+          <JourneySection />
+        </div>
+        <div id="contact">
+          <ContactSection />
+        </div>
+        <div id="testimonials">
+          <ClientsTestimonialsSection />
+        </div>
       </ScrollContainer>
     </div>
   );

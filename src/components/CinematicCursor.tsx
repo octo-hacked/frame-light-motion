@@ -66,7 +66,7 @@ export const CinematicCursor = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 mix-blend-difference">
+    <div className="hidden md:block fixed inset-0 pointer-events-none z-50 mix-blend-difference">
       {/* Lens Flare */}
       <div
         ref={flareRef}
