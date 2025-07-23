@@ -456,7 +456,7 @@ export const ShowreelSection = () => {
         <div className="flex justify-center mb-8 md:mb-12">
           <div className="w-full max-w-lg md:max-w-none">
             {/* Mobile: Horizontal scroll */}
-            <div className="md:hidden overflow-x-auto scrollbar-hide">
+            <div className="md:hidden overflow-x-auto scrollbar-hide smooth-scroll-x">
               <div className="flex gap-3 px-6 pb-2" style={{ minWidth: 'max-content' }}>
                 {videoCategories.map((category) => (
                   <button
@@ -619,7 +619,7 @@ export const ShowreelSection = () => {
         {/* Video Thumbnails Grid - Mobile Optimized */}
         <div className="max-w-6xl mx-auto">
           {/* Mobile: Horizontal scroll */}
-          <div className="md:hidden overflow-x-auto scrollbar-hide px-6">
+          <div className="md:hidden overflow-x-auto scrollbar-hide smooth-scroll-x px-6">
             <div className="flex gap-4 pb-4" style={{ minWidth: 'max-content' }}>
               {currentVideos.map((video, index) => (
                 <div key={video.id} className="flex-shrink-0 w-48">
