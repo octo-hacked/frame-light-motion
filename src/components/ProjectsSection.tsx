@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X, Play, Pause, Quote, Clock, User, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { SwipeCarousel, TapHoldReveal } from './MobileInteractions';
+import { LazyImage } from './LazyComponents';
 
 gsap.registerPlugin(ScrollTrigger);
 
